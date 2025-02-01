@@ -106,7 +106,28 @@ public class Exercici0200 {
      */
     public static void drawPascal(int n) {
 
-        
+        ArrayList<ArrayList<Integer>> pascalTriangle = new ArrayList<>();
+
+    for (int row = 0; row < n; row++) {
+        ArrayList<Integer> currentRow = new ArrayList<>();
+        for (int col = 0; col <= row; col++) {
+            if (col == 0 || col == row) {
+                currentRow.add(1);
+            } else {
+                int value = pascalTriangle.get(row - 1).get(col - 1) + pascalTriangle.get(row - 1).get(col);
+                currentRow.add(value);
+            }
+        }
+        pascalTriangle.add(currentRow);
+    }
+
+    // Print the Pascal's Triangle
+    for (ArrayList<Integer> row : pascalTriangle) {
+        for (Integer num : row) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
 
     }
 
