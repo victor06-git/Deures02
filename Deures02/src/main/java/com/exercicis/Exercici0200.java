@@ -145,7 +145,14 @@ public class Exercici0200 {
      * @test ./runTest.sh com.exercicis.TestExercici0200#testAddListDecimals
      */
     public static double addList(ArrayList<Double> list) {
-        return 0.0;
+       
+        double suma = 0;
+
+        for (double num : list) {
+            suma += num;
+        }
+
+        return suma;
     }
 
     /** 
@@ -163,6 +170,13 @@ public class Exercici0200 {
      */
     public static void printMatrix(int[][] matrix) {
 
+        for (int [] nums : matrix) {
+            String numbers = "";
+            for (int num : nums) {
+                numbers = num + " ";
+            }
+            System.out.println(numbers);
+        }
     }
 
     /**
