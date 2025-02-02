@@ -108,28 +108,28 @@ public class Exercici0200 {
 
         ArrayList<ArrayList<Integer>> pascalTriangle = new ArrayList<>();
 
-    for (int row = 0; row < n; row++) {
-        ArrayList<Integer> currentRow = new ArrayList<>();
-        for (int col = 0; col <= row; col++) {
-            if (col == 0 || col == row) {
-                currentRow.add(1);
-            } else {
-                int value = pascalTriangle.get(row - 1).get(col - 1) + pascalTriangle.get(row - 1).get(col);
-                currentRow.add(value);
+        for (int row = 0; row < n; row++) {
+            ArrayList<Integer> currentRow = new ArrayList<>();
+            for (int col = 0; col <= row; col++) {
+                if (col == 0 || col == row) {
+                    currentRow.add(1);
+                } else {
+                    int value = pascalTriangle.get(row - 1).get(col - 1) + pascalTriangle.get(row - 1).get(col); //Suma dels dos números anteriors a la rowActual
+                    currentRow.add(value); //Add values to th currentRow ArrayList
+                }
             }
+            pascalTriangle.add(currentRow); //add the row to the pascaltriangle
         }
-        pascalTriangle.add(currentRow);
-    }
 
-    // Print the Pascal's Triangle
-    for (ArrayList<Integer> row : pascalTriangle) {
-        for (Integer num : row) {
-            System.out.print(num + " ");
+        // Print the Pascal's Triangle
+        for (ArrayList<Integer> row : pascalTriangle) {
+            for (Integer num : row) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
         }
-        System.out.println();
-    }
 
-    }
+        }
 
     /**
      * Fes una funció que sumi els valors d'un ArrayList<double>
