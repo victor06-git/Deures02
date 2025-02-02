@@ -349,7 +349,17 @@ public class Exercici0200 {
      * @test ./runTest.sh com.exercicis.TestExercici0200#testSumaSenseSumarLargeNumbers
      */
     public static int sumaSenseSumar(int a, int b) {
-        return 0;
+
+        String num1 = "x".repeat(Math.abs(a));
+        String num2 = "x".repeat(Math.abs(b));
+        
+        Integer rst = num1.length() + num2.length();
+
+        if ((a < 0 && b >= 0) || (a >= 0 && b < 0)) {
+            rst = Math.max(num1.length(), num2.length()) - Math.min(num1.length(), num2.length());
+        }
+
+        return (a < 0 || b < 0) ? -rst : rst;
     }
 
     /**
