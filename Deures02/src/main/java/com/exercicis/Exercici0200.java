@@ -2,6 +2,7 @@ package com.exercicis;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Exercici0200 {
@@ -171,11 +172,13 @@ public class Exercici0200 {
     public static void printMatrix(int[][] matrix) {
 
         for (int [] nums : matrix) {
-            String numbers = "";
-            for (int num : nums) {
-                numbers = num + " ";
+            for (int i = 0; i < nums.length; i++) {
+                System.out.print(nums[i]);
+                if (i < nums.length - 1) {
+                    System.out.print(", ");
+                }
             }
-            System.out.println(numbers);
+            System.out.println();
         }
     }
 
@@ -208,7 +211,17 @@ public class Exercici0200 {
      * @test ./runTest.sh com.exercicis.TestExercici0200#testTransposeSingleElement
      */
     public static int[][] transpose(int[][] matrix) {
-        int[][] rst = new int[0][0];
+        
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int[][] rst = new int[col][row];
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                rst[j][i] = matrix[i][j];
+            }
+        }
+
         return rst;
     }
 
@@ -233,6 +246,19 @@ public class Exercici0200 {
      * @test ./runTest.sh com.exercicis.TestExercici0200#testFirstNonRepeatedLongString
      */
     public static char firstNonRepeated(String str) {
+       
+        HashMap<Character, Integer> count = new HashMap<>();
+     
+        for (char letter : str.toCharArray()) {
+            count.put(letter, count.getOrDefault(letter, 0) + 1);       
+        }
+
+        for (char letter : str.toCharArray()) {
+            if (count.get(letter) == 1) {
+                return letter;
+            }
+        }
+        
         return '_';
     }
 
@@ -248,7 +274,14 @@ public class Exercici0200 {
      * @test ./runTest.sh com.exercicis.TestExercici0200#testInverIntSingleDigit
      */
     public static int inverInt(int num) {
-        return 0;
+        
+        String rst_S = "";
+        String str = Integer.toString(num);
+
+        for (int i = str.length() - 1; i >= 0; i--) {
+            rst_S += str.charAt(i);
+        }
+        return Integer.parseInt(rst_S);
     }
 
     /**
@@ -274,6 +307,22 @@ public class Exercici0200 {
      */
     public static ArrayList<Integer> minMaxAdd(ArrayList<Integer> nums) {
         ArrayList<Integer> rst = new ArrayList<>();
+        
+        nums.sort((a, b) -> a.compareTo(b));
+         
+        Integer minNum = 0;
+        for (int i = 0; i < nums.size() - 1; i++) {
+            minNum += nums.get(i);
+        }
+
+        Integer maxNum = 0;
+        for (int j = 1 ; j < nums.size(); j++) {
+            maxNum += nums.get(j);
+        }
+
+        rst.add(minNum);
+        rst.add(maxNum);
+
         return rst;
     }
 

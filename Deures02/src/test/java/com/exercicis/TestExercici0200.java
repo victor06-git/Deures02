@@ -1,19 +1,18 @@
 package com.exercicis;
 
-import com.exercicis.Exercici0200;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-import static org.junit.jupiter.api.Assertions.*;
-import com.github.stefanbirkner.systemlambda.SystemLambda;
-import com.testStringUtils.TestStringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Locale;
+
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 class TestExercici0200 {
 
@@ -611,7 +610,7 @@ class TestExercici0200 {
     void testMinMaxAddWithNegatives(TestInfo testInfo) {
         try {
             ArrayList<Integer> nums = new ArrayList<>(Arrays.asList(-1, -2, -3, -4, -5));
-            ArrayList<Integer> expected = new ArrayList<>(Arrays.asList(-10, -6));
+            ArrayList<Integer> expected = new ArrayList<>(Arrays.asList(-14, -10));
             assertEquals(expected, Exercici0200.minMaxAdd(nums));
             System.out.println("Test passed, succeeded!");
         } catch (AssertionError e) {
