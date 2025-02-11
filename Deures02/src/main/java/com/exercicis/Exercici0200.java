@@ -384,6 +384,25 @@ public class Exercici0200 {
      */
     public static ArrayList<Integer> minDistances(String text, char target) {
         ArrayList<Integer> rst = new ArrayList<>();
+
+        char[] textArray = text.toCharArray();
+
+        for (int i = 0; i < textArray.length; i++) {
+            if (textArray[i] == target) {
+                rst.add(0);
+            } else {
+                rst.add(1);
+            }
+        }
+
+        for (int i = 1; i < rst.size(); i++) {
+            if (rst.get(i) == 1) {
+                rst.set(i, rst.get(i - 1) + 1);
+            } else {
+                rst.set(i, rst.get(i - 1));
+            }
+        }
+
         return rst;
     }
 
