@@ -383,32 +383,35 @@ public class Exercici0200 {
      * @test ./runTest.sh com.exercicis.TestExercici0200#testMinDistancesNoTargetFound
      */
     public static ArrayList<Integer> minDistances(String text, char target) {
-        ArrayList<Integer> rst = new ArrayList<>();
+        int textLength = text.length();
+        int[] left = new int[textLength];
+        int[] right = new int[textLength];
 
-        int n = text.length(); //Define the length of the string
-        int[] distances = new int[n]; //Create an array to store the distances
-        int lastTargetIndex = -n; //Initialize the last target index to -n
+        // Inicialitzar els arrays amb la longitud de la cadena
+        Arrays.fill(left, textLength);
+        Arrays.fill(right, textLength);
 
-        for (int i = 0; i < n; i++) {
-            if (text.charAt(i) == target) { //If the current character is the target
-                lastTargetIndex = i; //Update the last target index
-            } 
-            distances[i] = i - lastTargetIndex;
+        // Distàncies mínimes de l'esquerra a la dreta
+        int lastTargetIndex = -textLength;
+        for (int cntChar = 0; cntChar < textLength; cntChar = cntChar + 1) {
+            if (text.charAt(cntChar) == target) lastTargetIndex = cntChar;
+            left[cntChar] = cntChar - lastTargetIndex;
         }
 
-       lastTargetIndex = 2 * n; //
-       for (int i = n - 1; i >= 0; i--) {
-        if (text.charAt(i) == target) {
-            lastTargetIndex = i;
-            }
-            distances[i] = Math.min(distances[i], lastTargetIndex - i);
-       }
-
-       for ( int distance : distances ) {
-            rst.add(distance);
+        // Distàncies mínimes de la dreta a l'esquerra
+        lastTargetIndex = 2 * textLength;
+        for (int cntChar = (textLength - 1); cntChar >= 0; cntChar = cntChar - 1) {
+            if (text.charAt(cntChar) == target) lastTargetIndex = cntChar;
+            right[cntChar] = lastTargetIndex - cntChar;
         }
 
-        return rst;
+        // Formar la llista de distàncies mínimes
+        ArrayList<Integer> distances = new ArrayList<>(textLength);
+        for (int cntChar = 0; cntChar < textLength; cntChar = cntChar + 1) {
+            distances.add(Math.min(left[cntChar], right[cntChar]));
+        }
+
+        return distances;
     }
 
     /**
@@ -432,6 +435,21 @@ public class Exercici0200 {
      * @test ./runTest.sh com.exercicis.TestExercici0200#testFindUniqueNumberNoUnique
      */
     public static Double findUniqueNumber(ArrayList<Double> nums) {
-        return 0.0;
+        HashMap<Double, Integer> map = new HashMap<>();
+        for (Double num : nums) {
+            if (map.containsKey(num)) {
+                map.put(num, map.get(num) + 1);
+            } else {
+                map.put(num, 1);
+        }
     }
-}
+
+        for (HashMap.Entry<Double, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == 1) {
+                return entry.getKey();
+            }
+        }
+        return null;
+        }
+    }
+
