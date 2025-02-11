@@ -385,22 +385,27 @@ public class Exercici0200 {
     public static ArrayList<Integer> minDistances(String text, char target) {
         ArrayList<Integer> rst = new ArrayList<>();
 
-        char[] textArray = text.toCharArray();
+        int n = text.length(); //Define the length of the string
+        int[] distances = new int[n]; //Create an array to store the distances
+        int lastTargetIndex = -n; //Initialize the last target index to -n
 
-        for (int i = 0; i < textArray.length; i++) {
-            if (textArray[i] == target) {
-                rst.add(0);
-            } else {
-                rst.add(1);
-            }
+        for (int i = 0; i < n; i++) {
+            if (text.charAt(i) == target) { //If the current character is the target
+                lastTargetIndex = i; //Update the last target index
+            } 
+            distances[i] = i - lastTargetIndex;
         }
 
-        for (int i = 1; i < rst.size(); i++) {
-            if (rst.get(i) == 1) {
-                rst.set(i, rst.get(i - 1) + 1);
-            } else {
-                rst.set(i, rst.get(i - 1));
+       lastTargetIndex = 2 * n; //
+       for (int i = n - 1; i >= 0; i--) {
+        if (text.charAt(i) == target) {
+            lastTargetIndex = i;
             }
+            distances[i] = Math.min(distances[i], lastTargetIndex - i);
+       }
+
+       for ( int distance : distances ) {
+            rst.add(distance);
         }
 
         return rst;
