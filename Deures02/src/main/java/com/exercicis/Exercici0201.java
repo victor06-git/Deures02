@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 public class Exercici0201 {
 
@@ -60,7 +58,14 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testGeneraArrayEnters
      */
     public static int[] generaArrayEnters(int mida) {
-        int[] rst = new int[0];
+        
+        int[] rst = new int[mida];
+        Random rand = new Random();
+
+        for (int i = 0; i < mida; i++) {
+            rst[i] = rand.nextInt(100);
+        }
+
         return rst;
     }
 
@@ -76,6 +81,28 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testMostraArrayEstadistiques
      */
     public static void mostraArrayEstadistiques(int[] array) {
+        Integer maximo = Integer.MIN_VALUE;
+        Integer minimo = Integer.MAX_VALUE;
+        double media = 0.0;
+
+        for (int valor : array) {
+            media += valor;
+            if (valor > maximo) {
+                maximo = valor;
+            } if (valor < minimo) {
+                minimo = valor;
+            }
+        }
+        media = media / array.length;
+
+        System.out.print("Array: [");
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i]);
+            if (i < array.length - 1)
+                System.out.print(", ");
+        }
+        System.out.println("]");
+        System.out.println("Màxim: " + maximo + "  Mínim: " + minimo + "  Mitjana: " + media);
     }
 
     /**
@@ -88,6 +115,11 @@ public class Exercici0201 {
      */
     public static ArrayList<Integer> generaLlistaEnters(int mida) {
         ArrayList<Integer> rst = new ArrayList<>();
+        Random rand = new Random();
+
+        for (int i = 0; i < mida; i++) {
+            rst.add(rand.nextInt(100));
+        }
         return rst;
     }
 
@@ -105,8 +137,30 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testMostraLlistaEstadistiques
      */
     public static void mostraLlistaEstadistiques(ArrayList<Integer> llista) {
-
+            int max = Integer.MIN_VALUE;
+            Integer min = Integer.MAX_VALUE;
+            double total = 0.0;
+    
+            for (int value : llista) {
+                total += value;
+                if (value > max) {
+                    max = value;
+                } if (value < min) {
+                    min = value;
+                }
+            }
+            total = total / llista.size();
+    
+            System.out.print("Llista: [");
+            for (int i = 0; i < llista.size(); i++) {
+                System.out.print(llista.get(i));
+                if (i < llista.size() - 1)
+                    System.out.print(", ");
+            }
+            System.out.println("]");
+            System.out.println("Màxim: " + max + "  Mínim: " + min + "  Mitjana: " + total);
     }
+    
 
     /**
      * Demana a l'usuari que escrigui 5 paraules separades per ',' o ', ' 
@@ -120,9 +174,30 @@ public class Exercici0201 {
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0201#testFiltraArrayParaulesAmbA
      */
+    // ...existing code...
     public static void filtraArrayParaulesAmbA() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Escriu 5 paraules separades per ',' o ', ': ");
+        String paraula = sc.nextLine().toLowerCase().trim();
 
+        String[] paraules = paraula.split(",\\s*");
+        String rst = "Paraules que comencen amb 'a': ";
+
+        boolean first = true;
+        for (int i = 0; i < paraules.length; i++) {
+            String word = paraules[i].trim();
+            if (word.startsWith("a")) {
+                if (!first) {
+                    rst += ", ";
+                }
+                rst += word;
+                first = false;
+            }
+        }
+
+        System.out.println(rst);
     }
+// ...existing code...
        
     /**
      * Demana a l'usuari que escrigui 5 paraules separades per ',' o ', ' 
@@ -137,7 +212,27 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testFiltraLlistaParaulesAmbA
      */
     public static void filtraLlistaParaulesAmbA() {
+        //Scanner scanner = new Scanner(System.in);
+        System.out.print("Escriu 5 paraules separades per ',' o ', ': ");
+        String paraula = scanner.nextLine().toLowerCase().trim();
+        String[] paraulasStrings = paraula.split(",");
+        ArrayList<String> paraules = new ArrayList<String>(Arrays.asList(paraulasStrings));
 
+        boolean coma = false;
+            
+        String rst = "Paraules que comencen amb 'a': ";
+        for (String word : paraules) {
+            if (word.trim().startsWith("a")) {
+                if (!coma) {
+                    rst += word;
+                    coma = true;
+                } else {
+                    rst += "," + word;
+                }
+            }
+        }
+
+        System.out.println(rst);
     }
 
     /**
@@ -149,7 +244,13 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testGeneraArrayDecimals
      */
     public static double[] generaArrayDecimals(int mida) {
-        double[] rst = new double[0];
+        double[] rst = new double[mida];
+
+        Random rand = new Random();
+        for (int i = 0; i < mida; i++) {
+            rst[i] = rand.nextDouble(0.0, 100.0);
+        }
+
         return rst;
     }
 
@@ -162,7 +263,7 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testFiltraArrayDecimalsSuperiors50
      */
     public static ArrayList<Double> generaLlistaDecimals(int mida) {
-        ArrayList<Double> rst = new ArrayList<>();
+        ArrayList<Double> rst = new ArrayList<>(mida);
         return rst;
     }
 
