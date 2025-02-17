@@ -43,11 +43,11 @@ public class Exercici0201 {
         mostrarFrecuenciaParaules();
         
         invertirMapaClauValor();
-        */
-        
+                
         fusionarMapesSumantValors();
-        /* 
+        */ 
         ordenarMapaPerClaus();
+        /*
         calcularEstadistiquesNotesEstudiants();
         */
 
@@ -479,9 +479,10 @@ public class Exercici0201 {
     /**
      * Ordena un HashMap per les claus mitjançant un TreeMap i mostra el resultat.
      * 
-     * Es crea un HashMap amb elements (Banana=3, Poma=5, Taronja=2) i es transfereix a un TreeMap
+     * Es crea un HashMap amb elements (Banana=3, Poma=5, Taronja=2)
      * per obtenir un ordre natural de les claus (alfabètic).
      * 
+     * Mostrar les claus amb el seu valor ordenar per nom de clau.
      * 
      * Es mostra per pantalla:
      * "Mapa ordenat per claus: {Banana=3, Poma=5, Taronja=2}".
@@ -494,6 +495,27 @@ public class Exercici0201 {
         mapa.put("Banana", 3);
         mapa.put("Poma", 5);
         mapa.put("Taronja", 2);
+
+        Collection<String> fruites = mapa.keySet();
+        ArrayList<String> fruitesOrdenades = new ArrayList<>(fruites);
+        String mapaOrdenat = "";
+
+        fruitesOrdenades.sort((fruita1, fruita2) -> fruita2.compareTo(fruita1));
+
+        HashMap<String, Integer> newMap = new HashMap<>();
+        for (String fruit : fruitesOrdenades) {
+            newMap.put(fruit, mapa.get(fruit));
+        }
+        /*
+        for (String fruit : fruitesOrdenades) {
+            for (int num : mapa.values()) {
+                if (mapa.get(fruit) == num) {
+                    
+                }
+            }
+        }
+        */
+        System.out.println("Mapa ordenat per claus: " + newMap);
 
     }
 
