@@ -2,6 +2,7 @@ package com.exercicis;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
@@ -263,7 +264,11 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testFiltraArrayDecimalsSuperiors50
      */
     public static ArrayList<Double> generaLlistaDecimals(int mida) {
-        ArrayList<Double> rst = new ArrayList<>(mida);
+        ArrayList<Double> rst = new ArrayList<>();
+        for (int cnt = 0; cnt < mida; cnt++) {
+            Random rd = new Random();
+            rst.add(rd.nextDouble(100));
+        }
         return rst;
     }
 
@@ -283,7 +288,25 @@ public class Exercici0201 {
      */
     public static void filtraArrayDecimalsSuperiors50(double[] decimals) {
 
-    }   
+        String array = "";
+        String valors = "";
+
+        for (int i = 0; i < decimals.length; i++) {
+            array += String.format("%.2f, ", decimals[i]);
+        }
+        array = array.substring(0, array.length() - 2) + "]";
+
+        for (int j = 0; j < decimals.length; j++) {
+            if (decimals[j] > 50) {
+                valors += String.format("%.2f, ", decimals[j]);
+            }
+        }
+
+        valors = valors.substring(0, valors.length() - 2) + "]";
+
+        System.out.println("Array original: [" + array);
+        System.out.println("Valors majors que 50: [" + valors);
+    }
 
     /**
      * Filtra i mostra els decimals superiors a 50 d'una llista.
@@ -300,6 +323,25 @@ public class Exercici0201 {
      */
     public static void filtraLlistaDecimalsSuperiors50(ArrayList<Double> decimals) {
 
+        String original = "";
+        String filtrats = "";
+
+        for (int i = 0; i < decimals.size(); i++) {
+            original += String.format("%.2f, ", decimals.get(i));
+        }
+        original = original.substring(0, original.length() - 2) + "]";
+
+        for (int j = 0; j < decimals.size(); j++) {
+            if (decimals.get(j) > 50) {
+                filtrats += String.format("%.2f, ", decimals.get(j));
+            }
+        }
+
+        filtrats = filtrats.substring(0, filtrats.length() - 2) + "]";
+
+        System.out.println("Llista original: [" + original);
+        System.out.println("Valors majors que 50: [" + filtrats);
+
     }
     
     /**
@@ -313,6 +355,20 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testMostrarLlistaOrdenadesPerEdat
      */
     public static void mostrarLlistaOrdenadesPerEdat(HashMap<String, Integer> persones) {
+
+        Collection<Integer> edats = persones.values();
+        ArrayList<Integer> edatsOrdenades = new ArrayList<>(edats);
+        String edatSort = "";
+        edatsOrdenades.sort((a, b) -> a.compareTo(b));
+        for (int edat : edatsOrdenades) {
+            for (String nom : persones.keySet()) {
+                if (persones.get(nom) == edat) {
+                    edatSort += nom + " (" + edat + ")\n";
+                }
+            }
+        }
+
+        System.out.println(edatSort.substring(0, edatSort.length() - 1));
 
     }
 
