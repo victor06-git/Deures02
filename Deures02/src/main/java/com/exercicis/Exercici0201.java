@@ -41,12 +41,12 @@ public class Exercici0201 {
         mostrarLlistaOrdenadesPerEdat(persones);
         
         mostrarFrecuenciaParaules();
-        */
         
         invertirMapaClauValor();
+        */
         
-        /*
         fusionarMapesSumantValors();
+        /* 
         ordenarMapaPerClaus();
         calcularEstadistiquesNotesEstudiants();
         */
@@ -455,6 +455,25 @@ public class Exercici0201 {
      */
     public static void fusionarMapesSumantValors() {
 
+        HashMap<String, Integer> mapa1 = new HashMap<>();
+        mapa1.put("X", 10);
+        mapa1.put("Y", 20);
+        HashMap<String, Integer> mapa2 = new HashMap<>();
+        mapa2.put("Y", 5);
+        mapa2.put("Z", 15);
+
+        HashMap<String, Integer> mapaFusionat = new HashMap<>();
+        for (String key : mapa1.keySet()) {
+            for (String key2 : mapa2.keySet()) {
+                if (key.equals(key2)) {
+                    mapaFusionat.put(key, mapa1.get(key) + mapa2.get(key2));
+                } else {
+                    mapaFusionat.put(key, mapa1.get(key));
+                    mapaFusionat.put(key2, mapa2.get(key2));
+                }
+            }
+        }
+        System.out.println("Mapa fusionat: "  + mapaFusionat);
     }
 
     /**
@@ -470,6 +489,11 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testOrdenarMapaPerClaus
      */
     public static void ordenarMapaPerClaus() {
+
+        HashMap<String, Integer> mapa = new HashMap<>();
+        mapa.put("Banana", 3);
+        mapa.put("Poma", 5);
+        mapa.put("Taronja", 2);
 
     }
 
