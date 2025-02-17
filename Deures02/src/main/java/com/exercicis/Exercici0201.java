@@ -18,7 +18,7 @@ public class Exercici0201 {
         scanner = new Scanner(System.in);
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
-        
+        /* 
         int[] arrEnters = generaArrayEnters(10);
         mostraArrayEstadistiques(arrEnters);
 
@@ -39,12 +39,17 @@ public class Exercici0201 {
         persones.put("Joan", 30);
         persones.put("Marc", 20);
         mostrarLlistaOrdenadesPerEdat(persones);
-
+        
         mostrarFrecuenciaParaules();
+        */
+        
         invertirMapaClauValor();
+        
+        /*
         fusionarMapesSumantValors();
         ordenarMapaPerClaus();
         calcularEstadistiquesNotesEstudiants();
+        */
 
         Locale.setDefault(defaultLocale);
         scanner.close();
@@ -386,6 +391,21 @@ public class Exercici0201 {
      */
     public static void mostrarFrecuenciaParaules() {
 
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Introdueix una frase: ");
+        String frase = sc.nextLine().toLowerCase().trim();
+        String[] paraules = frase.split(" ");
+        HashMap<String, Integer> frequencia = new HashMap<>();
+        for (String word : paraules) {
+            if (frequencia.containsKey(word)) {
+                frequencia.put(word, frequencia.get(word) + 1);
+            } else {
+                frequencia.put(word, 1);
+            }
+        }
+
+        String rst = "Freqüència de paraules: " + frequencia;
+        System.out.println(rst);
     }
 
     /**
@@ -401,6 +421,19 @@ public class Exercici0201 {
      * @test ./runTest.sh com.exercicis.TestExercici0201#testInvertirMapaClauValor
      */
     public static void invertirMapaClauValor() {
+
+        HashMap<String, Integer> newMap = new HashMap<>();
+        newMap.put("A", 1);
+        newMap.put("B", 2);
+        newMap.put("C", 3);
+
+        HashMap<Integer, String> invertedMap = new HashMap<>();
+        for (String key : newMap.keySet()) {
+            invertedMap.put(newMap.get(key), key);
+        }
+
+        System.out.println("Mapa original: " + newMap);
+        System.out.println("Mapa invertit: " + invertedMap);
 
     }
 
