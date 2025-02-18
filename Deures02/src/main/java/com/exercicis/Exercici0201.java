@@ -525,13 +525,26 @@ public class Exercici0201 {
      * Es defineix un HashMap on la clau és el nom de l'estudiant i el valor la seva nota.
      * El mètode calcula la mitjana, la nota màxima i la nota mínima i les mostra per pantalla.
      * 
-     * 
+     *
      * Es mostra per pantalla:
      * "Mitjana: [valor], Màxim: [valor], Mínim: [valor]".
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0201#testCalcularEstadistiquesNotesEstudiants
      */
     public static void calcularEstadistiquesNotesEstudiants() {
+
+        HashMap<String, Double> estudiants = new HashMap<>();
+        estudiants.put("Marc", 2.8);
+        estudiants.put("Joan", 3.4);
+        estudiants.put("Enric", 6.6);
+        estudiants.put("Victor", 0.5);
+        estudiants.put("Samuel", 9.8);
+        estudiants.put("Andreu", 7.2);
+
+        for (String student : estudiants.keySet()) {
+            
+        }
+
 
     }
 }
