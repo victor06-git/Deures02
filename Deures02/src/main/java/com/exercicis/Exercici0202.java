@@ -22,8 +22,8 @@ public class Exercici0202 {
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
 
-        //showJSONAstronautes("./data/astronautes.json");
-        JSONAstronautesToArrayList("./data/astronautes.json");
+        showJSONAstronautes("./data/astronautes.json");
+        //JSONAstronautesToArrayList("./data/astronautes.json");
 
         //showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "or");
         // showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "plata");
@@ -137,6 +137,29 @@ public class Exercici0202 {
      */
     public static ArrayList<HashMap<String, Object>> JSONEsportistesToArrayList(String filePath) {
         ArrayList<HashMap<String, Object>> rst = new ArrayList<>();
+
+        try {
+            
+            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            JSONObject jSONObject = new JSONObject(content); //Passar a objecte
+            JSONArray jSONArray = jSONObject.getJSONArray("esportistes"); //Passar a array
+            
+            for (int esp = 0; esp < jSONArray.length(); esp++) {
+                JSONObject esportista = jSONArray.getJSONObject(esp); //Passar a objecte
+                HashMap<String, Object> esportistaMap = new HashMap<>();
+                esportistaMap.put("nom", esportista.getString("nom"));
+                esportistaMap.put("any_naixement", esportista.getInt("any_naixement"));
+                esportistaMap.put("pais", esportista.getString("pais"));
+                JSONObject medalles = esportista.getJSONObject("medalles");
+                esportistaMap.put("medalles", medalles.toMap());
+                rst.add(esportistaMap); //Afegeixo a la llista
+            }
+
+        } catch (IOException e) {
+            System.out.priny(e.getMessage());
+
+        } catch (Exception e) {
+        }
         return rst;
     }
 
