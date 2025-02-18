@@ -133,30 +133,32 @@ public class Exercici0202 {
      * Les dades han d'estar en un HashMap amb: nom, any_naixement, pais i medalles
      * Les medalles de la clau 'medalles' han d'estar en un HashMap amb les claus "or", "plata" i "bronze"
      * 
-     * @test ./runTest.sh com.exercicis.TestExercici0202#JSONEsportistesToArrayList
+     * @test ./runTest.sh com.exercicis.TestExercici0202#testJSONEsportistesToArrayList
      */
     public static ArrayList<HashMap<String, Object>> JSONEsportistesToArrayList(String filePath) {
         ArrayList<HashMap<String, Object>> rst = new ArrayList<>();
 
         try {
             
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            String content = new String(Files.readAllBytes(Paths.get(filePath))); //String amb el contingut de l'arxiu
             JSONObject jSONObject = new JSONObject(content); //Passar a objecte
             JSONArray jSONArray = jSONObject.getJSONArray("esportistes"); //Passar a array
             
             for (int esp = 0; esp < jSONArray.length(); esp++) {
                 JSONObject esportista = jSONArray.getJSONObject(esp); //Passar a objecte
+                
                 HashMap<String, Object> esportistaMap = new HashMap<>();
                 esportistaMap.put("nom", esportista.getString("nom"));
                 esportistaMap.put("any_naixement", esportista.getInt("any_naixement"));
                 esportistaMap.put("pais", esportista.getString("pais"));
+
                 JSONObject medalles = esportista.getJSONObject("medalles");
                 esportistaMap.put("medalles", medalles.toMap());
                 rst.add(esportistaMap); //Afegeixo a la llista
             }
 
         } catch (IOException e) {
-            System.out.priny(e.getMessage());
+            System.out.print(e.getMessage());
 
         } catch (Exception e) {
         }
