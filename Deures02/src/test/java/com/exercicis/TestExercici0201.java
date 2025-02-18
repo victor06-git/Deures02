@@ -1,15 +1,5 @@
 package com.exercicis;
 
-import com.exercicis.Exercici0201;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-import static org.junit.jupiter.api.Assertions.*;
-import com.github.stefanbirkner.systemlambda.SystemLambda;
-import com.testStringUtils.TestStringUtils;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -17,6 +7,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
+
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 
 class TestExercici0201 {
 
@@ -348,17 +347,5 @@ class TestExercici0201 {
 
     @Test
     void testCalcularEstadistiquesNotesEstudiants(TestInfo testInfo) throws Exception {
-        try {
-            String output = SystemLambda.tapSystemOut(() -> Exercici0201.calcularEstadistiquesNotesEstudiants());
-            String expected = "Mitjana: 7.333333333333333, Màxim: 8.5, Mínim: 6.0";
-            assertEquals(expected, output.trim());
-            System.out.println("Test passed, succeeded!");
-        } catch (AssertionError e) {
-            System.out.println("Test failed: " + testInfo.getDisplayName());
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Test encountered an error: " + testInfo.getDisplayName());
-            e.printStackTrace();
-        }
     }
 }

@@ -45,11 +45,21 @@ public class Exercici0201 {
         invertirMapaClauValor();
                 
         fusionarMapesSumantValors();
-        */ 
+         
         ordenarMapaPerClaus();
-        /*
-        calcularEstadistiquesNotesEstudiants();
         */
+        HashMap<String, Double> notes = new HashMap<>();
+        notes.put("Anna", 7.5);
+        notes.put("Joan", 6.8);
+        notes.put("Marta", 8.2);
+        notes.put("Pere", 4.1);
+        notes.put("Enric", 2.0);
+        notes.put("Amparo", 6.9);
+        notes.put("Olga", 9.0);
+        notes.put("Manel", 2.2);
+
+        calcularEstadistiquesNotesEstudiants(notes);
+        
 
         Locale.setDefault(defaultLocale);
         scanner.close();
@@ -531,20 +541,30 @@ public class Exercici0201 {
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0201#testCalcularEstadistiquesNotesEstudiants
      */
-    public static void calcularEstadistiquesNotesEstudiants() {
+    public static void calcularEstadistiquesNotesEstudiants(HashMap<String, Double> notes) {
 
-        HashMap<String, Double> estudiants = new HashMap<>();
-        estudiants.put("Marc", 2.8);
-        estudiants.put("Joan", 3.4);
-        estudiants.put("Enric", 6.6);
-        estudiants.put("Victor", 0.5);
-        estudiants.put("Samuel", 9.8);
-        estudiants.put("Andreu", 7.2);
+        
 
-        for (String student : estudiants.keySet()) {
-            
+        Double mitjana = 0.0;
+        Double maxim = Double.MIN_VALUE;
+        Double minim = Double.MAX_VALUE;
+        Integer total = 0;
+
+
+        //Recorrer la lista de Keys del HashMap y dentro las notas
+        for (double nota : notes.values()) {
+            total ++;
+            mitjana += nota;
+            if (nota > maxim) {
+                maxim = nota;
+            } if (nota < minim) {
+                minim = nota;
+            }
         }
 
+        mitjana = mitjana / notes.size();
+
+        System.out.printf("Mitjana: %.2f, Màxim: %.2f, Mínim: %.2f%n", mitjana, maxim, minim);
 
     }
 }
