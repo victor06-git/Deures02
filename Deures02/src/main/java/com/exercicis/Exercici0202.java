@@ -189,7 +189,7 @@ public class Exercici0202 {
             
             Integer a = (Integer) medalles0.get(tipusMedalla);
             Integer b = (Integer) medalles1.get(tipusMedalla);
-            
+
             return a.compareTo(b);
             });
 
@@ -197,8 +197,13 @@ public class Exercici0202 {
 
             ArrayList<HashMap<String, Object>> esportistesByPlata = new ArrayList<>(esportistes);
             esportistesByPlata.sort((esportista1, esportista2) -> {
-            Integer a = (Integer) esportista1.get("medalles");
-            Integer b = (Integer) esportista2.get("medalles");
+
+            HashMap<?, ?> medalles0 = (HashMap<?, ?>) esportista1.get("medalles");
+            HashMap<?, ?> medalles1 = (HashMap<?, ?>) esportista2.get("medalles");
+            
+            Integer a = (Integer) medalles0.get(tipusMedalla);
+            Integer b = (Integer) medalles1.get(tipusMedalla);
+
             return a.compareTo(b);
             });
 
@@ -206,8 +211,13 @@ public class Exercici0202 {
 
             ArrayList<HashMap<String, Object>> esportistesByBronze = new ArrayList<>(esportistes);
             esportistesByBronze.sort((esportista1, esportista2) -> {
-            Integer a = (Integer) esportista1.get("medalles");
-            Integer b = (Integer) esportista2.get("medalles");
+
+            HashMap<?, ?> medalles0 = (HashMap<?, ?>) esportista1.get("medalles");
+            HashMap<?, ?> medalles1 = (HashMap<?, ?>) esportista2.get("medalles");
+
+            Integer a = (Integer) medalles0.get(tipusMedalla);
+            Integer b = (Integer) medalles1.get(tipusMedalla);
+            
             return a.compareTo(b);
             });
 
