@@ -137,30 +137,28 @@ public class Exercici0202 {
      */
     public static ArrayList<HashMap<String, Object>> JSONEsportistesToArrayList(String filePath) {
         ArrayList<HashMap<String, Object>> rst = new ArrayList<>();
-
         try {
-            
-            String content = new String(Files.readAllBytes(Paths.get(filePath))); //String amb el contingut de l'arxiu
-            JSONObject jSONObject = new JSONObject(content); //Passar a objecte
-            JSONArray jSONArray = jSONObject.getJSONArray("esportistes"); //Passar a array
-            
-            for (int esp = 0; esp < jSONArray.length(); esp++) {
-                JSONObject esportista = jSONArray.getJSONObject(esp); //Passar a objecte
-                
-                HashMap<String, Object> esportistaMap = new HashMap<>();
-                esportistaMap.put("nom", esportista.getString("nom"));
-                esportistaMap.put("any_naixement", esportista.getInt("any_naixement"));
-                esportistaMap.put("pais", esportista.getString("pais"));
+            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            JSONArray jsonArray = new JSONArray(content);
 
-                JSONObject medalles = esportista.getJSONObject("medalles");
-                esportistaMap.put("medalles", medalles.toMap());
-                rst.add(esportistaMap); //Afegeixo a la llista
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("nom", jsonObject.getString("nom"));
+                map.put("any_naixement", jsonObject.getInt("any_naixement"));
+                map.put("pais", jsonObject.getString("pais"));
+
+                JSONObject medalles = jsonObject.getJSONObject("medalles_olimpiques");
+                HashMap<String, Object> mapMedalles = new HashMap<>();
+                mapMedalles.put("or", medalles.getInt("or"));
+                mapMedalles.put("plata", medalles.getInt("plata"));
+                mapMedalles.put("bronze", medalles.getInt("bronze"));
+
+                map.put("medalles", mapMedalles);
+                rst.add(map);
             }
-
-        } catch (IOException e) {
-            System.out.print(e.getMessage());
-
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return rst;
     }
@@ -180,6 +178,46 @@ public class Exercici0202 {
     public static ArrayList<HashMap<String, Object>> ordenarEsportistesPerMedalla(String filePath, String tipusMedalla) {
         // Obtenir la llista d'esportistes des del fitxer JSON
         ArrayList<HashMap<String, Object>> esportistes = JSONEsportistesToArrayList(filePath);
+
+        if (tipusMedalla.equalsIgnoreCase("or")) {
+
+            ArrayList<HashMap<String, Object>> esportistesByOr = new ArrayList<>(esportistes);
+            esportistesByOr.sort((esportista1, esportista2) -> {
+
+            HashMap<?, ?> medalles0 = (HashMap<?, ?>) esportista1.get("medalles");
+            HashMap<?, ?> medalles1 = (HashMap<?, ?>) esportista2.get("medalles");
+            
+            Integer a = (Integer) medalles0.get(tipusMedalla);
+            Integer b = (Integer) medalles1.get(tipusMedalla);
+            
+            return a.compareTo(b);
+            });
+
+        } else if (tipusMedalla.equalsIgnoreCase("plata")) {
+
+            ArrayList<HashMap<String, Object>> esportistesByPlata = new ArrayList<>(esportistes);
+            esportistesByPlata.sort((esportista1, esportista2) -> {
+            Integer a = (Integer) esportista1.get("medalles");
+            Integer b = (Integer) esportista2.get("medalles");
+            return a.compareTo(b);
+            });
+
+        } else if (tipusMedalla.equalsIgnoreCase("bronze")) {
+
+            ArrayList<HashMap<String, Object>> esportistesByBronze = new ArrayList<>(esportistes);
+            esportistesByBronze.sort((esportista1, esportista2) -> {
+            Integer a = (Integer) esportista1.get("medalles");
+            Integer b = (Integer) esportista2.get("medalles");
+            return a.compareTo(b);
+            });
+
+        } else {
+
+            throw new IllegalArgumentException("Tipus de medalla invàlid: " + tipusMedalla + ". Tipus vàlids: 'or', 'plata' o 'bronze'.");
+
+        }
+
+
         return esportistes;
     }
 
