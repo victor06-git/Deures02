@@ -22,11 +22,11 @@ public class Exercici0202 {
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
 
-        showJSONAstronautes("./data/astronautes.json");
+        //showJSONAstronautes("./data/astronautes.json");
         //JSONAstronautesToArrayList("./data/astronautes.json");
 
-        //showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "or");
-        // showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "plata");
+        showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "or");
+        showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "plata");
 
         //mostrarPlanetesOrdenats("./data/planetes.json", "nom");
         //mostrarPlanetesOrdenats("./data/planetes.json", "radi");
@@ -179,54 +179,23 @@ public class Exercici0202 {
         // Obtenir la llista d'esportistes des del fitxer JSON
         ArrayList<HashMap<String, Object>> esportistes = JSONEsportistesToArrayList(filePath);
 
-        if (tipusMedalla.equalsIgnoreCase("or")) {
-
-            ArrayList<HashMap<String, Object>> esportistesByOr = new ArrayList<>(esportistes);
-            esportistesByOr.sort((esportista1, esportista2) -> {
-
-            HashMap<?, ?> medalles0 = (HashMap<?, ?>) esportista1.get("medalles");
-            HashMap<?, ?> medalles1 = (HashMap<?, ?>) esportista2.get("medalles");
-            
-            Integer a = (Integer) medalles0.get(tipusMedalla);
-            Integer b = (Integer) medalles1.get(tipusMedalla);
-
-            return a.compareTo(b);
-            });
-
-        } else if (tipusMedalla.equalsIgnoreCase("plata")) {
-
-            ArrayList<HashMap<String, Object>> esportistesByPlata = new ArrayList<>(esportistes);
-            esportistesByPlata.sort((esportista1, esportista2) -> {
-
-            HashMap<?, ?> medalles0 = (HashMap<?, ?>) esportista1.get("medalles");
-            HashMap<?, ?> medalles1 = (HashMap<?, ?>) esportista2.get("medalles");
-            
-            Integer a = (Integer) medalles0.get(tipusMedalla);
-            Integer b = (Integer) medalles1.get(tipusMedalla);
-
-            return a.compareTo(b);
-            });
-
-        } else if (tipusMedalla.equalsIgnoreCase("bronze")) {
-
-            ArrayList<HashMap<String, Object>> esportistesByBronze = new ArrayList<>(esportistes);
-            esportistesByBronze.sort((esportista1, esportista2) -> {
-
-            HashMap<?, ?> medalles0 = (HashMap<?, ?>) esportista1.get("medalles");
-            HashMap<?, ?> medalles1 = (HashMap<?, ?>) esportista2.get("medalles");
-
-            Integer a = (Integer) medalles0.get(tipusMedalla);
-            Integer b = (Integer) medalles1.get(tipusMedalla);
-            
-            return a.compareTo(b);
-            });
-
-        } else {
-
+        if (!tipusMedalla.equals("or") && !tipusMedalla.equals("plata") && !tipusMedalla.equals("bronze")) {
             throw new IllegalArgumentException("Tipus de medalla invàlid: " + tipusMedalla + ". Tipus vàlids: 'or', 'plata' o 'bronze'.");
-
         }
 
+        // Ordenem la llista en ordre descendent segons el tipus de medalla
+        esportistes.sort((esportista0, esportista1) -> {
+            // Fer HashMap<?, ?> enlloc de HashMap<String, Integer> evita warnings de tipus
+            HashMap<?, ?> medalles0 = (HashMap<?, ?>) esportista0.get("medalles");
+            HashMap<?, ?> medalles1 = (HashMap<?, ?>) esportista1.get("medalles");
+
+            // Com que hem fet servir HashMap<?, ?>, cal definir el tipus (Integer)
+            Integer a = (Integer) medalles0.get(tipusMedalla);
+            Integer b = (Integer) medalles1.get(tipusMedalla);
+
+            // Ordenar en ordre descendent
+            return b.compareTo(a);
+        });
 
         return esportistes;
     }
@@ -254,7 +223,22 @@ public class Exercici0202 {
      * @test ./runTest.sh com.exercicis.TestExercici0202#testShowEsportistesOrdenatsPerPlata
      * @test ./runTest.sh com.exercicis.TestExercici0202#testShowEsportistesOrdenatsPerBronze
      */
+    // filepath: /home/victor/Documentos/GitHub/Deures02/Deures02/src/main/java/com/exercicis/Exercici0202.java
     public static void showEsportistesOrdenatsPerMedalla(String filePath, String tipusMedalla) {
+        
+        String tipusMedallaFormatted = tipusMedalla.substring(0, 1).toUpperCase() + tipusMedalla.substring(1).toLowerCase();
+
+        System.out.println("┌" + "──────────────────────" + "┬" + "─────────────────" + "┬" + "────────────" + "┬" + "────────" + "┐");
+        System.out.println("│ Nom                  │ País            │ Naixement  │ " + tipusMedallaFormatted + " ".repeat(7 - tipusMedallaFormatted.length()) + "│");
+        System.out.println("├" + "──────────────────────" + "┼" + "─────────────────" + "┼" + "────────────" + "┼" + "────────" + "┤");
+
+        ArrayList<HashMap<String, Object>> esportistes = ordenarEsportistesPerMedalla(filePath, tipusMedalla);
+        for (HashMap<String, Object> esportista : esportistes) {
+            System.out.printf("│ %-20s │ %-15s │ %-10d │ %-6d │%n", esportista.get("nom"), esportista.get("pais"), esportista.get("any_naixement"), ((HashMap<?, ?>) esportista.get("medalles")).get(tipusMedalla));
+        }
+
+        System.out.println("└" + "──────────────────────" + "┴" + "─────────────────" +"┴" + "────────────" + "┴" + "────────" + "┘");
+
     }
 
     /**
