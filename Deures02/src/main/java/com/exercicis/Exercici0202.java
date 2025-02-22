@@ -260,6 +260,7 @@ public class Exercici0202 {
      */
     public static ArrayList<HashMap<String, Object>> JSONPlanetesToArrayList(String filePath) {
         ArrayList<HashMap<String, Object>> planetesList = new ArrayList<>();
+    
         return planetesList;
     }
 
