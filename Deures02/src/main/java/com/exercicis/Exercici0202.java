@@ -388,29 +388,102 @@ public class Exercici0202 {
      */
     public static void mostrarPlanetesOrdenats(String filePath, String columnaOrdenacio) {
         ArrayList<HashMap<String, Object>> planetes = JSONPlanetesToArrayList(filePath);
-
         
-        planetes.sort((planet1, planet2) -> {
-            String planetA = (String) planet1.get("nom");
-            String planetB = (String) planet2.get("nom");
-            return planetA.compareTo(planetB);
-        });
-
         //HashMap --> dades_fisiques --> HashMap(radi_km)
-                                       //HashMap(massa_kg)     
-        for (HashMap<String, Object> dadesMap : planetes) {
-            HashMap<String, Object> dadesRadi = (HashMap<String, Object>) dadesMap.get("dades_fisiques");
-        }
-        
-        // ordenarRadi.sort((planet1, planet2) -> {
-        //     int radiA = (int) planet1.get() 
-        // });
-        
-        
-        for (HashMap<String, Object> massaMap : planetes) {
+                                       //HashMap(massa_kg)   
+        //HashMap --> orbita --> HashMap(distancia_mitjana_km)
+                                       
+        switch (columnaOrdenacio.toLowerCase()) {
+            
+            case "nom":
+                planetes.sort((planet1, planet2) -> ((String) planet1.get("nom")).compareTo((String) planet2.get("nom")));//ordenació per nom
+                break;
 
+            case "radi":
+                planetes.sort((planet1, planet2) -> {
+                    HashMap<?, ?> dadesFisiques1 = (HashMap<?, ?>) planet1.get("dades_fisiques");
+                    HashMap<?, ?> dadesFisiques2 = (HashMap<?, ?>) planet2.get("dades_fisiques");
+                    return Double.compare((Double) dadesFisiques1.get("radi_km"), (Double) dadesFisiques2.get("radi_km")); //ordenació per 
+                });
+                break;
+
+            case "massa":
+                planetes.sort((planet1, planet2) -> {
+                HashMap<?, ?> dadesFisiques1 = (HashMap<?, ?>) planet1.get("dades_fisiques");
+                HashMap<?, ?> dadesFisiques2 = (HashMap<?, ?>) planet2.get("dades_fisiques");
+                return Double.compare((Double) dadesFisiques1.get("massa_kg"), (Double) dadesFisiques2.get("massa_kg"));
+                }); 
+                break;
+            
+            case "distància":
+
+                planetes.sort((planet1, planet2) -> {
+                HashMap<?, ?> orbita1 = (HashMap<?, ?>) planet1.get("orbita");
+                HashMap<?, ?> orbita2 = (HashMap<?, ?>) planet2.get("orbita");
+                return Integer.compare((Integer) orbita1.get("distancia_mitjana_km"), (Integer) orbita2.get("distancia_mitjana_km"));
+                });
+                break;
+
+            default:
+            throw new IllegalArgumentException("Tipus de columna invàlid: " + columnaOrdenacio + ". Tipus vàlids: 'nom', 'radi', 'massa' o 'distància'.");
         }
+
+        String[] headers = {"Nom", "Radi (km)", "Massa (kg)", "Distància (km)"};
+        int[] columnWidths = {15, 10, 15, 15};
+
+        StringBuilder rst = new StringBuilder();
+
+        rst.append("┌");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i] + 2));
+            if (i < headers.length - 1) {
+            rst.append("┬");
+            }
+        }
+        rst.append("┐\n");
+
+        rst.append("│");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append(String.format(" %-"+columnWidths[i]+"s │", headers[i]));
+        }
+        rst.append("\n");
+
+        rst.append("├");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i] + 2));
+            if (i < headers.length - 1) {
+            rst.append("┼");
+            }
+        }
+        rst.append("┤\n");
+
+        for (HashMap<String, Object> planeta : planetes) {
+            HashMap<?, ?> dadesFisiques = (HashMap<?, ?>) planeta.get("dades_fisiques");
+            HashMap<?, ?> orbita = (HashMap<?, ?>) planeta.get("orbita");
+
+            rst.append("│");
+            rst.append(String.format(" %-" + columnWidths[0] + "s │", planeta.get("nom")));
+            rst.append(String.format(" %-" + columnWidths[1] + "s │", dadesFisiques.get("radi_km")));
+            rst.append(String.format(" %-" + columnWidths[2] + "s │", dadesFisiques.get("massa_kg")));
+            rst.append(String.format(" %-" + columnWidths[3] + "s │", orbita.get("distancia_mitjana_km")));
+            rst.append("\n");
+        }
+
+        rst.append("└");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i] + 2));
+            if (i < headers.length - 1) {
+            rst.append("┴");
+            } else {
+            rst.append("┘");
+            }
+        }
+        rst.append("\n");
+
+        System.out.print(rst);
+
     }
+    
 
     /**
      * Crea un HashMap que representa una massa d'aigua amb característiques addicionals.
