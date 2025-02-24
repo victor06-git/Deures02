@@ -25,13 +25,13 @@ public class Exercici0202 {
         //showJSONAstronautes("./data/astronautes.json");
         //JSONAstronautesToArrayList("./data/astronautes.json");
 
-        showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "or");
-        showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "plata");
+        //showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "or");
+        //showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "plata");
 
-        //mostrarPlanetesOrdenats("./data/planetes.json", "nom");
-        //mostrarPlanetesOrdenats("./data/planetes.json", "radi");
-        //mostrarPlanetesOrdenats("./data/planetes.json", "massa");
-        //mostrarPlanetesOrdenats("./data/planetes.json", "distància");
+        mostrarPlanetesOrdenats("./data/planetes.json", "nom");
+        mostrarPlanetesOrdenats("./data/planetes.json", "radi");
+        mostrarPlanetesOrdenats("./data/planetes.json", "massa");
+        mostrarPlanetesOrdenats("./data/planetes.json", "distància");
 
 
         ArrayList<HashMap<String, Object>> dades = new ArrayList<>();
@@ -384,9 +384,32 @@ public class Exercici0202 {
      * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsNom
      * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsRadi
      * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsMassa
-     * @test ./runTest.sh com.exercicis.TestExercici0202#testMostrarPlanetesOrdenatsDistancia
+     * @test ./runTest.sh com.exercicis.TestExercici0202#tefilePathstMostrarPlanetesOrdenatsDistancia
      */
     public static void mostrarPlanetesOrdenats(String filePath, String columnaOrdenacio) {
+        ArrayList<HashMap<String, Object>> planetes = JSONPlanetesToArrayList(filePath);
+
+        
+        planetes.sort((planet1, planet2) -> {
+            String planetA = (String) planet1.get("nom");
+            String planetB = (String) planet2.get("nom");
+            return planetA.compareTo(planetB);
+        });
+
+        //HashMap --> dades_fisiques --> HashMap(radi_km)
+                                       //HashMap(massa_kg)     
+        for (HashMap<String, Object> dadesMap : planetes) {
+            HashMap<String, Object> dadesRadi = (HashMap<String, Object>) dadesMap.get("dades_fisiques");
+        }
+        
+        // ordenarRadi.sort((planet1, planet2) -> {
+        //     int radiA = (int) planet1.get() 
+        // });
+        
+        
+        for (HashMap<String, Object> massaMap : planetes) {
+
+        }
     }
 
     /**
