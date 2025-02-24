@@ -224,21 +224,84 @@ public class Exercici0202 {
      * @test ./runTest.sh com.exercicis.TestExercici0202#testShowEsportistesOrdenatsPerBronze
      */
     // filepath: /home/victor/Documentos/GitHub/Deures02/Deures02/src/main/java/com/exercicis/Exercici0202.java
-    public static void showEsportistesOrdenatsPerMedalla(String filePath, String tipusMedalla) {
+    // public static void showEsportistesOrdenatsPerMedalla(String filePath, String tipusMedalla) {
         
-        String tipusMedallaFormatted = tipusMedalla.substring(0, 1).toUpperCase() + tipusMedalla.substring(1).toLowerCase();
+    //     String tipusMedallaFormatted = tipusMedalla.substring(0, 1).toUpperCase() + tipusMedalla.substring(1).toLowerCase();
 
-        System.out.println("┌" + "──────────────────────" + "┬" + "─────────────────" + "┬" + "────────────" + "┬" + "────────" + "┐");
-        System.out.println("│ Nom                  │ País            │ Naixement  │ " + tipusMedallaFormatted + " ".repeat(7 - tipusMedallaFormatted.length()) + "│");
-        System.out.println("├" + "──────────────────────" + "┼" + "─────────────────" + "┼" + "────────────" + "┼" + "────────" + "┤");
+    //     System.out.println("┌" + "──────────────────────" + "┬" + "─────────────────" + "┬" + "────────────" + "┬" + "────────" + "┐");
+    //     System.out.println("│ Nom                  │ País            │ Naixement  │ " + tipusMedallaFormatted + " ".repeat(7 - tipusMedallaFormatted.length()) + "│");
+    //     System.out.println("├" + "──────────────────────" + "┼" + "─────────────────" + "┼" + "────────────" + "┼" + "────────" + "┤");
 
+    //     ArrayList<HashMap<String, Object>> esportistes = ordenarEsportistesPerMedalla(filePath, tipusMedalla);
+    //     for (HashMap<String, Object> esportista : esportistes) {
+    //         System.out.printf("│ %-20s │ %-15s │ %-10d │ %-6d │%n", esportista.get("nom"), esportista.get("pais"), esportista.get("any_naixement"), ((HashMap<?, ?>) esportista.get("medalles")).get(tipusMedalla));
+    //     }
+
+    //     System.out.println("└" + "──────────────────────" + "┴" + "─────────────────" +"┴" + "────────────" + "┴" + "────────" + "┘");
+
+    // }
+
+    public static void showEsportistesOrdenatsPerMedalla(String filePath, String tipusMedalla) {
         ArrayList<HashMap<String, Object>> esportistes = ordenarEsportistesPerMedalla(filePath, tipusMedalla);
+
+        String tipusMedallaCapitalized = tipusMedalla.substring(0, 1).toUpperCase() + tipusMedalla.substring(1).toLowerCase();
+
+        String[] headers = {"Nom", "País", "Naixement", tipusMedallaCapitalized};
+        int[] columnWidths = {20, 15, 10, 6};
+
+        StringBuilder rst = new StringBuilder();
+
+        rst.append("┌");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i]+2));
+            if (i < headers.length - 1) {
+                rst.append("┬");
+            }
+        }
+        rst.append("┐\n");
+        
+        
+        //Segona linea
+        rst.append("│");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append(String.format(" %-"+columnWidths[i]+"s │", headers[i]));
+        }
+        rst.append("\n");
+
+        //Tercera linea
+        rst.append("├");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i]+2));
+            if (i < headers.length - 1) {
+                rst.append("┼");
+            }
+        }
+        rst.append("┤\n");
+
+        //Quarta linea i las altres lineas fins acabar el HashMap
         for (HashMap<String, Object> esportista : esportistes) {
-            System.out.printf("│ %-20s │ %-15s │ %-10d │ %-6d │%n", esportista.get("nom"), esportista.get("pais"), esportista.get("any_naixement"), ((HashMap<?, ?>) esportista.get("medalles")).get(tipusMedalla));
+            HashMap<String, Integer> medalles = (HashMap<String, Integer>) esportista.get("medalles");
+            rst.append("│");
+            rst.append(String.format(" %-"+columnWidths[0]+"s │", esportista.get("nom")));
+            rst.append(String.format(" %-"+columnWidths[1]+"s │", esportista.get("pais")));
+            rst.append(String.format(" %-"+columnWidths[2]+"d │", esportista.get("any_naixement")));
+            rst.append(String.format(" %-"+columnWidths[3]+"d │", medalles.get(tipusMedalla)));
+            rst.append("\n");
         }
 
-        System.out.println("└" + "──────────────────────" + "┴" + "─────────────────" +"┴" + "────────────" + "┴" + "────────" + "┘");
+        rst.append("└");
+        for (int i = 0; i < headers.length; i++) {
+            rst.append("─".repeat(columnWidths[i] + 2));
+            if (i < headers.length - 1) {
+                rst.append("┴");
+            } 
+            if (i == headers.length - 1) {  
+                rst.append("┘");
+            }
+        }
+        rst.append("\n");
 
+        System.out.print(rst);
     }
 
     /**
