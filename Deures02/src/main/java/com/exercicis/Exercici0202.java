@@ -389,21 +389,24 @@ public class Exercici0202 {
     public static void mostrarPlanetesOrdenats(String filePath, String columnaOrdenacio) {
         ArrayList<HashMap<String, Object>> planetes = JSONPlanetesToArrayList(filePath);
         
+       
+        if (!columnaOrdenacio.equalsIgnoreCase("nom") && !columnaOrdenacio.equalsIgnoreCase("radi") && !columnaOrdenacio.equalsIgnoreCase("massa") && !columnaOrdenacio.equalsIgnoreCase("distància")) {
+            throw new IllegalArgumentException("Tipus de columna invàlid: " + columnaOrdenacio + ". Tipus vàlids: 'nom', 'radi', 'massa' o 'distància'.");
+        }
         //HashMap --> dades_fisiques --> HashMap(radi_km)
                                        //HashMap(massa_kg)   
         //HashMap --> orbita --> HashMap(distancia_mitjana_km)
                                        
         switch (columnaOrdenacio.toLowerCase()) {
-            
             case "nom":
-                planetes.sort((planet1, planet2) -> ((String) planet1.get("nom")).compareTo((String) planet2.get("nom")));//ordenació per nom
+                planetes.sort((planet1, planet2) -> ((String) planet1.get("nom")).compareTo((String) planet2.get("nom")));//ordenació
                 break;
 
             case "radi":
                 planetes.sort((planet1, planet2) -> {
                     HashMap<?, ?> dadesFisiques1 = (HashMap<?, ?>) planet1.get("dades_fisiques");
                     HashMap<?, ?> dadesFisiques2 = (HashMap<?, ?>) planet2.get("dades_fisiques");
-                    return Double.compare((Double) dadesFisiques1.get("radi_km"), (Double) dadesFisiques2.get("radi_km")); //ordenació per 
+                    return Double.compare((Double) dadesFisiques1.get("radi_km"), (Double) dadesFisiques2.get("radi_km"));
                 });
                 break;
 
@@ -423,9 +426,9 @@ public class Exercici0202 {
                 return Integer.compare((Integer) orbita1.get("distancia_mitjana_km"), (Integer) orbita2.get("distancia_mitjana_km"));
                 });
                 break;
-
+                
             default:
-            throw new IllegalArgumentException("Tipus de columna invàlid: " + columnaOrdenacio + ". Tipus vàlids: 'nom', 'radi', 'massa' o 'distància'.");
+                System.out.println("");
         }
 
         String[] headers = {"Nom", "Radi (km)", "Massa (kg)", "Distància (km)"};
@@ -462,10 +465,10 @@ public class Exercici0202 {
             HashMap<?, ?> orbita = (HashMap<?, ?>) planeta.get("orbita");
 
             rst.append("│");
-            rst.append(String.format(" %-" + columnWidths[0] + "s │", planeta.get("nom")));
-            rst.append(String.format(" %-" + columnWidths[1] + "s │", dadesFisiques.get("radi_km")));
-            rst.append(String.format(" %-" + columnWidths[2] + "s │", dadesFisiques.get("massa_kg")));
-            rst.append(String.format(" %-" + columnWidths[3] + "s │", orbita.get("distancia_mitjana_km")));
+            rst.append(String.format(" %-"+columnWidths[0]+"s │", planeta.get("nom")));
+            rst.append(String.format(" %-"+columnWidths[1]+"s │", dadesFisiques.get("radi_km")));
+            rst.append(String.format(" %-"+columnWidths[2]+"s │", dadesFisiques.get("massa_kg")));
+            rst.append(String.format(" %-"+columnWidths[3]+"s │", orbita.get("distancia_mitjana_km")));
             rst.append("\n");
         }
 
