@@ -28,10 +28,10 @@ public class Exercici0202 {
         //showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "or");
         //showEsportistesOrdenatsPerMedalla("./data/esportistes.json", "plata");
 
-        mostrarPlanetesOrdenats("./data/planetes.json", "nom");
-        mostrarPlanetesOrdenats("./data/planetes.json", "radi");
-        mostrarPlanetesOrdenats("./data/planetes.json", "massa");
-        mostrarPlanetesOrdenats("./data/planetes.json", "distància");
+        // mostrarPlanetesOrdenats("./data/planetes.json", "nom");
+        // mostrarPlanetesOrdenats("./data/planetes.json", "radi");
+        // mostrarPlanetesOrdenats("./data/planetes.json", "massa");
+        // mostrarPlanetesOrdenats("./data/planetes.json", "distància");
 
 
         ArrayList<HashMap<String, Object>> dades = new ArrayList<>();
@@ -501,7 +501,16 @@ public class Exercici0202 {
      * @test ./runTest.sh com.exercicis.TestExercici0202#testCrearMassaAigua
      */
     public static HashMap<String, Object> crearMassaAigua(String nom, String tipus, double superficie_km2, double profunditat_max_m, ArrayList<String> caracteristiques) {
+        
         HashMap<String, Object> massaAigua = new HashMap<>();
+
+        //Crea un HashMap amb els parámetres de la funció
+        massaAigua.put("nom", nom);
+        massaAigua.put("tipus", tipus);
+        massaAigua.put("superficie_km2", superficie_km2);
+        massaAigua.put("profunditat_max_m", profunditat_max_m);
+        massaAigua.put("caracteristiques", caracteristiques);
+
         return massaAigua;
     }
 
@@ -529,6 +538,29 @@ public class Exercici0202 {
      * @test ./runTest.sh com.exercicis.TestExercici0202#testValidarFormatJSON
      */
     public static void generarJSON(ArrayList<HashMap<String, Object>> dades, String filePath) throws IOException {
+
+
+       
+        /*JSONObject jsonObject = new JSONObject();
+
+        for (HashMap<String, Object> dada : dades) {
+            jsonObject.put("nom" , dada.get("nom"));
+            jsonObject.put("tipus", dada.get("tipus"));
+            jsonObject.put("profunditat_max_m", dada.get("profunditat_max_m"));
+            jsonObject.put("superficie_km2", dada.get("superficie_km2"));
+            jsonObject.put("caracteristiques", dada.get("caracteristiques"));
+        }
+
+        jsonArray.put(jsonObject);
+        */  
+        JSONArray jsonArray  = new JSONArray(dades);
+        Files.write(Paths.get(filePath), jsonArray.toString(4).getBytes());
+
+        // try (FileWriter file = new FileWriter(filePath)) {
+        //     file.write(jsonArray.toString(4)); // JSON amb indentació de 4 espais
+        // } catch (IOException e) {
+        //     System.err.println(e);
+        // }
 
     }
 }
