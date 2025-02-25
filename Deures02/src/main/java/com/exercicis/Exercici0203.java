@@ -1,10 +1,15 @@
 package com.exercicis;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Exercici0203 {
 
@@ -21,13 +26,18 @@ public class Exercici0203 {
         String url0 = "http://example.com";
         validarURL(url0); 
 
+        
+
         String url1 = "https://google";
         validarURL(url1); 
+
+        
 
         
         
         try {
             ArrayList<HashMap<String, Object>> monuments = loadMonuments("./data/monuments.json");
+            //System.out.println(monuments);
             ArrayList<HashMap<String, Object>> monumentsOrdenats = ordenaMonuments(monuments, "nom");
             ArrayList<HashMap<String, Object>> monumentsFiltrats = filtraMonuments(monuments, "categoria", "cultural");
 
@@ -67,20 +77,26 @@ public class Exercici0203 {
      * @test ./runTest.sh com.exercicis.TestExercici0203#testValidarURL
      */
     public static boolean validarURL(String url) {
-
-        if (!url.isEmpty()) {
-            return true;
-        } else if (!url.contains(" ")) {
-            return true;
-        } else if (url.startsWith("http://") || url.startsWith("https://")) {
-            return true;
-        } else if (url.contains(".")) {
-            return true;
-        } else if (!url.startsWith(".") && !url.endsWith(".")) {
-            return true;
+        if (url == null || url.isEmpty() || url.contains(" ")) {
+            return false;
+        } else if (!url.startsWith("http://") && !url.startsWith("https://")){
+            return false;
         }
 
-        return false;
+        String senseProtocol = url.substring(url.indexOf("://") + 3);
+
+        String domini = "";
+        if (senseProtocol.contains("/")) {
+            domini = senseProtocol.split("/", 2)[0];
+        } else {
+            domini = senseProtocol;
+        }
+
+        if (!domini.contains(".") || domini.startsWith(".") || domini.endsWith(".")) {
+            return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -102,6 +118,52 @@ public class Exercici0203 {
      */
     public static ArrayList<HashMap<String, Object>> loadMonuments(String filePath) throws IOException {
         ArrayList<HashMap<String, Object>> rst = new ArrayList<>();
+
+        String content = new String(Files.readAllBytes(Paths.get(filePath)));
+        JSONObject json = new JSONObject(content); 
+        JSONArray jsonMonuments = json.getJSONArray("monuments");
+
+        for (int i = 0; i < jsonMonuments.length(); i++) {
+            JSONObject monument = jsonMonuments.getJSONObject(i);
+            HashMap<String, Object> monuments = new HashMap<>();
+            monuments.put("nom", monument.getString("nom"));
+            monuments.put("pais", monument.getString("pais"));
+            monuments.put("categoria", monument.getString("categoria"));
+
+            JSONObject jsonDetalls = monument.getJSONObject("detalls");
+            HashMap<String, Object> detalls = new HashMap<>();
+            detalls.put("any_declaracio", jsonDetalls.getInt("any_declaracio"));
+            
+            JSONObject jsonCoords = jsonDetalls.getJSONObject("coordenades");
+            HashMap<String, Double> coordenades = new HashMap<>();
+            coordenades.put("latitud", jsonCoords.getDouble("latitud"));
+            coordenades.put("longitud", jsonCoords.getDouble("longitud"));
+            
+            ArrayList<String> numeros = new ArrayList<>();
+            for (String key : jsonDetalls.keySet()){
+                numeros.add(key);
+            }
+
+            HashMap<String, Object> altres = new HashMap<>();
+            altres.put("clau", numeros.get(2));
+            Object valor = jsonDetalls.get(numeros.get(2));
+            if (valor instanceof Integer) {
+                altres.put("valor", String.valueOf(valor));
+            } else {
+                altres.put("valor", valor);
+            }
+
+            //HashMap<String, Object> altres = new HashMap<>();
+            //altres.put("clau", numeros.get(2));
+            //altres.put("valor", jsonDetalls.getString(numeros.get(2)));
+
+            //altres.put(numeros.get(2), jsonDetalls.getString(numeros.get(2)));
+
+            detalls.put("coordenades", coordenades);
+            detalls.put("altres", altres);
+            monuments.put("detalls", detalls);
+        }
+
         return rst;
     }
 
