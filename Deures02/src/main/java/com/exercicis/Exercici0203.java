@@ -1,19 +1,10 @@
 package com.exercicis;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
-import org.json.JSONObject;
-import org.json.JSONArray;
 
 public class Exercici0203 {
 
@@ -32,6 +23,8 @@ public class Exercici0203 {
 
         String url1 = "https://google";
         validarURL(url1); 
+
+        
         
         try {
             ArrayList<HashMap<String, Object>> monuments = loadMonuments("./data/monuments.json");
@@ -74,6 +67,19 @@ public class Exercici0203 {
      * @test ./runTest.sh com.exercicis.TestExercici0203#testValidarURL
      */
     public static boolean validarURL(String url) {
+
+        if (!url.isEmpty()) {
+            return true;
+        } else if (!url.contains(" ")) {
+            return true;
+        } else if (url.startsWith("http://") || url.startsWith("https://")) {
+            return true;
+        } else if (url.contains(".")) {
+            return true;
+        } else if (!url.startsWith(".") && !url.endsWith(".")) {
+            return true;
+        }
+
         return false;
     }
 
