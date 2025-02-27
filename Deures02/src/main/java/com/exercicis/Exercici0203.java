@@ -38,8 +38,12 @@ public class Exercici0203 {
         try {
             ArrayList<HashMap<String, Object>> monuments = loadMonuments("./data/monuments.json");
             //System.out.println(monuments);
-            ArrayList<HashMap<String, Object>> monumentsOrdenats = ordenaMonuments(monuments, "nom");
-            ArrayList<HashMap<String, Object>> monumentsFiltrats = filtraMonuments(monuments, "categoria", "cultural");
+        
+            Object resultat = getMonumentValue(monuments.get(0), "latitud");
+            System.out.println(resultat);
+        
+            //ArrayList<HashMap<String, Object>> monumentsOrdenats = ordenaMonuments(monuments, "nom");
+            //ArrayList<HashMap<String, Object>> monumentsFiltrats = filtraMonuments(monuments, "categoria", "cultural");
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -118,52 +122,40 @@ public class Exercici0203 {
      */
     public static ArrayList<HashMap<String, Object>> loadMonuments(String filePath) throws IOException {
         ArrayList<HashMap<String, Object>> rst = new ArrayList<>();
-
         String content = new String(Files.readAllBytes(Paths.get(filePath)));
-        JSONObject json = new JSONObject(content); 
-        JSONArray jsonMonuments = json.getJSONArray("monuments");
+        JSONArray monumentsArray = new JSONObject(content).getJSONArray("monuments");
+        for (int i = 0; i < monumentsArray.length(); i++) {
+            JSONObject monument = monumentsArray.getJSONObject(i);
+            HashMap<String, Object> monumentHM = new HashMap<>();
 
-        for (int i = 0; i < jsonMonuments.length(); i++) {
-            JSONObject monument = jsonMonuments.getJSONObject(i);
-            HashMap<String, Object> monuments = new HashMap<>();
-            monuments.put("nom", monument.getString("nom"));
-            monuments.put("pais", monument.getString("pais"));
-            monuments.put("categoria", monument.getString("categoria"));
+            for (String key : monument.keySet()) {
+                if (key.equals("nom") || key.equals("pais") || key.equals("categoria")) {
+                    monumentHM.put(key, monument.get(key));
+                } else if (key.equals("detalls")) {
+                    JSONObject detalls = monument.getJSONObject(key);
+                    HashMap<String, Object> detallsMap = new HashMap<>();
+                    HashMap<String, Object> altres = new HashMap<>();
+                    for (String detallsKey : detalls.keySet()) {
+                        if (!detallsKey.equals("any_declaracio") && !detallsKey.equals("coordenades")) {
+                            HashMap<String, Object> altre = new HashMap<>();
+                            altre.put("clau", detallsKey);
+                            altre.put("valor", detalls.get(detallsKey));
+                            altres.put(detallsKey, altre);
+                        } else {
+                            HashMap<String, Object> coordenades = new HashMap<>();
+                            JSONObject coordenadesJSON = detalls.getJSONObject("coordenades");
 
-            JSONObject jsonDetalls = monument.getJSONObject("detalls");
-            HashMap<String, Object> detalls = new HashMap<>();
-            detalls.put("any_declaracio", jsonDetalls.getInt("any_declaracio"));
-            
-            JSONObject jsonCoords = jsonDetalls.getJSONObject("coordenades");
-            HashMap<String, Double> coordenades = new HashMap<>();
-            coordenades.put("latitud", jsonCoords.getDouble("latitud"));
-            coordenades.put("longitud", jsonCoords.getDouble("longitud"));
-            
-            ArrayList<String> numeros = new ArrayList<>();
-            for (String key : jsonDetalls.keySet()){
-                numeros.add(key);
+                            coordenades.put("latitud", coordenadesJSON.getDouble("latitud"));
+                            coordenades.put("longitud", coordenadesJSON.getDouble("longitud"));
+                            detallsMap.put("coordenades",coordenades);
+                        }
+                    }
+                    detallsMap.put("altres", altres);
+                    monumentHM.put(key, detallsMap);
+                }
             }
-
-            HashMap<String, Object> altres = new HashMap<>();
-            altres.put("clau", numeros.get(2));
-            Object valor = jsonDetalls.get(numeros.get(2));
-            if (valor instanceof Integer) {
-                altres.put("valor", String.valueOf(valor));
-            } else {
-                altres.put("valor", valor);
-            }
-
-            //HashMap<String, Object> altres = new HashMap<>();
-            //altres.put("clau", numeros.get(2));
-            //altres.put("valor", jsonDetalls.getString(numeros.get(2)));
-
-            //altres.put(numeros.get(2), jsonDetalls.getString(numeros.get(2)));
-
-            detalls.put("coordenades", coordenades);
-            detalls.put("altres", altres);
-            monuments.put("detalls", detalls);
+            rst.add(monumentHM);
         }
-
         return rst;
     }
 
@@ -186,8 +178,30 @@ public class Exercici0203 {
      * @test ./runTest.sh com.exercicis.TestExercici0203#testGetMonumentValue
      */
     private static Object getMonumentValue(HashMap<String, Object> monument, String key) {
-        return null;
-    }
+
+        Object rst = null;
+        HashMap<String, Object> detalls = (HashMap<String, Object>) monument.get("detalls");
+
+        if (key.equals("nom") || key.equals("pais") || key.equals("categoria")) {
+            rst =  monument.get(key);
+
+        } else if (key.equals("any")) {
+            
+            if (detalls != null) {
+                rst = detalls.get("any_declaracio");
+            }
+
+        } else if (key.equals("latitud") || key.equals("longitud")) {
+            
+            if (detalls != null) {
+                HashMap<String, Object> coordenades = (HashMap<String, Object>) detalls.get("coordenades");
+                if (coordenades != null) {
+                    rst = coordenades.get(key);
+                }
+            }
+        }
+        return rst;
+    } 
     
 
     /**
