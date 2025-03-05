@@ -5,9 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,8 +45,9 @@ public class Exercici0203 {
             Object resultat = getMonumentValue(monuments.get(0), "latitud");
             System.out.println(resultat);
         
-            //ArrayList<HashMap<String, Object>> monumentsOrdenats = ordenaMonuments(monuments, "nom");
+            ArrayList<HashMap<String, Object>> monumentsOrdenats = ordenaMonuments(monuments, "nom");
             //ArrayList<HashMap<String, Object>> monumentsFiltrats = filtraMonuments(monuments, "categoria", "cultural");
+            
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -178,7 +181,7 @@ public class Exercici0203 {
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0203#testGetMonumentValue
      */
-    private static Object getMonumentValue(HashMap<String, Object> monument, String key) {
+    public static Object getMonumentValue(HashMap<String, Object> monument, String key) {
 
         Object rst = null;
         HashMap<String, Object> detalls = (HashMap<String, Object>) monument.get("detalls");
@@ -214,7 +217,7 @@ public class Exercici0203 {
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0203#testIsValidValue
      */
-    public static boolean isValid(String value, String[] validValues) {
+    public  static boolean isValid(String value, String[] validValues) {
         return Arrays.asList(validValues).contains(value);
     }
 
@@ -226,13 +229,33 @@ public class Exercici0203 {
      * @param sortKey camp per ordenar
      * @return ArrayList amb les dades dels monuments
      * 
-     * @throws IllegalArgumentException si el paràmetre de columna és invàlid forçant un 'try/catch'
+     * @throws IllegalArgumentException si el paràmetre de columna és invàlid forçant un 'try/catch' (posant throws IllegalArguments)
      * 
      * @test ./runTest.sh com.exercicis.TestExercici0203#testOrdenaMonuments
      */
     public static ArrayList<HashMap<String, Object>> ordenaMonuments(ArrayList<HashMap<String, Object>> monuments, String sortKey) throws IllegalArgumentException {
-
         ArrayList<HashMap<String, Object>> rst = new ArrayList<>(monuments);
+
+        if (!isValid(sortKey, new String[]{"nom", "any", "latitud", "longitud"})) {
+            throw new IllegalArgumentException("Clau no vàlida: " + sortKey);
+        }
+
+        Collections.sort(rst, (m1, m2) -> {
+            Object value1 = getMonumentValue(m1, sortKey);
+            Object value2 = getMonumentValue(m2, sortKey);
+
+            if (sortKey.equals("nom")) {
+                //Ordenació per nom
+                return ((String) value1).compareTo((String) value2);
+            } else if (sortKey.equals("any")) {
+                //Ordenació per any
+                return ((Integer) value1).compareTo((Integer) value2);
+            } else {
+                //Ordenació per latitud o longitud
+                return ((Double) value1).compareTo((Double) value2);
+            }
+        });
+
         return rst;
     }
 
@@ -247,11 +270,23 @@ public class Exercici0203 {
      * 
      * @throws IllegalArgumentException si el paràmetre de columna és invàlid (no força un 'try/catch')
      * 
-     * @test ./runTest.sh com.exercicis.TestExercici0203#testOrdenaMonuments
+     * @test ./runTest.sh com.exercicis.TestExercici0203#testFiltraMonuments
      */
     public static ArrayList<HashMap<String, Object>> filtraMonuments(ArrayList<HashMap<String, Object>> monuments, String filterKey, String filterValue) throws IllegalArgumentException {
-
-        return new ArrayList<>();
+        if (!isValid(filterKey, new String[]{"nom", "pais", "categoria"})) {
+            throw new IllegalArgumentException("Invalid filter key: " + filterKey);
+        }
+    
+        ArrayList<HashMap<String, Object>> filteredMonuments = new ArrayList<>(
+            monuments.stream()
+                .filter(monument -> {
+                    Object value = getMonumentValue(monument, filterKey);
+                    return value instanceof String && ((String) value).equalsIgnoreCase(filterValue);
+                })
+                .collect(Collectors.toList())
+        );
+    
+        return filteredMonuments;
     }
 
     /**
@@ -268,7 +303,23 @@ public class Exercici0203 {
      * @test ./runTest.sh com.exercicis.TestExercici0203#testGeneraMarcTaula
      */
     public static String generaMarcTaula(int[] columnWidths, char[] separators) {
-        return "";
+
+        String rst = "";
+
+        rst += separators[0];
+        for (int i = 0; i < columnWidths.length; i++) {
+            for (int j = 0; j < columnWidths[i];j++){
+                rst += "─";
+            }
+            if (i<columnWidths.length -1) {
+                rst += separators[1];
+            }   
+            
+        }
+        rst += separators[2];
+
+
+        return rst;
     }
 
     /**
@@ -280,18 +331,50 @@ public class Exercici0203 {
      *
      * Exemples:
      * formatRow(new String[]{"Nom", "País", "Any"}, new int[]{10, 6, 4});
-     * Retorna: "│ Nom       │ País  │ Any  │"
+     * Retorna: "│Nom       │País  │Any  │"
      *
      * formatRow(new String[]{"Machu Picchu", "Perú", "1983"}, new int[]{10, 6, 4});
-     * Retorna: "│ Machu Picchu │ Perú  │ 1983 │"
+     * Retorna: "│Machu Picchu │Perú  │1983 │"
      *
      * @param values Array amb els valors de cada columna.
      * @param columnWidths Array amb l'amplada de cada columna.
      * @return Una cadena de text formatejada representant una fila de la taula.
+     * 
+     * @test ./runTest.sh com.exercicis.TestExercici0203#testFormatRow
+     * 
      */
-    private static String formatRow(String[] values, int[] columnWidths) {
-        return "";
+    public static String formatRow(String[] values, int[] columnWidths) {
+
+        String rst = "│";
+        for (int val = 0; val < values.length; val++) {
+            if (values[val].length() > columnWidths[val]) {
+                rst += values[val].substring(0, columnWidths[val]) + "|";
+            } else {
+                rst += values[val] + " ".repeat(columnWidths[val] - values[val].length()) + "│";
+            }
+        }
+
+        return rst;
     }
+    /*
+    public static String formatRow(String[] values, int[] columnWidths) {
+        String rst = "";
+        for (int i = 0; i < values.length; i++) { 
+            rst += "│";
+            String value = values[i];
+            if (value.length() > columnWidths[i]) {
+                value = value.substring(0, columnWidths[i]);
+            }
+            rst += value;
+            int spaceCount = columnWidths[i] - value.length();
+            if (spaceCount > 0) {
+                rst += " ".repeat(spaceCount);
+            }
+            
+        }
+        rst += "│";
+        return rst;
+    }*/
 
     /**
      * Obté una representació en format text de les coordenades d'un monument.
@@ -316,7 +399,7 @@ public class Exercici0203 {
      * @return Una cadena de text amb les coordenades en format "latitud,longitud",
      *         o una cadena buida si no es troben les dades.
      */
-    private static String getCoordsString(HashMap<String, Object> monument) {
+    public  static String getCoordsString(HashMap<String, Object> monument) {
 
         return "";
     }
