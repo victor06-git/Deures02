@@ -36,30 +36,30 @@ public class RepasExamen0203 {
             System.out.println("Estudiantes cargados: " + estudiantes);
 
             // Filtrar estudiantes por edad
-            ArrayList<HashMap<String, Object>> estudiantesFiltrados = filtraEstudiantesPorEdad(estudiantes, 20, 22);
-            System.out.println("Estudiantes filtrados (edad 20-22): " + estudiantesFiltrados);
+            //ArrayList<HashMap<String, Object>> estudiantesFiltrados = filtraEstudiantesPorEdad(estudiantes, 20, 22);
+            //System.out.println("Estudiantes filtrados (edad 20-22): " + estudiantesFiltrados);
 
             // Ordenar estudiantes por nombre
-            ArrayList<HashMap<String, Object>> estudiantesOrdenados = ordenaEstudiantesPorNombre(estudiantes);
-            System.out.println("Estudiantes ordenados por nombre: " + estudiantesOrdenados);
+            //ArrayList<HashMap<String, Object>> estudiantesOrdenados = ordenaEstudiantesPorNombre(estudiantes);
+            //System.out.println("Estudiantes ordenados por nombre: " + estudiantesOrdenados);
 
             // Mostrar tabla de estudiantes
-            mostrarTablaEstudiantes(estudiantes);
+            //mostrarTablaEstudiantes(estudiantes);
 
             // Generar baraja de cartas francesas
-            ArrayList<HashMap<String, Object>> baraja = generaBarajaFrancesa();
-            System.out.println("Baraja generada: " + baraja);
+            //ArrayList<HashMap<String, Object>> baraja = generaBarajaFrancesa();
+            //System.out.println("Baraja generada: " + baraja);
 
             // Guardar la baraja en un archivo (opcional)
-            String barajaFilePath = "baraja.json"; // Cambia la ruta si es necesario
-            guardaBaraja(barajaFilePath, baraja);
-            System.out.println("Baraja guardada en: " + barajaFilePath);
+            //String barajaFilePath = "baraja.json"; // Cambia la ruta si es necesario
+            //guardaBaraja(barajaFilePath, baraja);
+            //System.out.println("Baraja guardada en: " + barajaFilePath);
 
             // Obtener el valor de una carta
-            String palo = "oros";
-            int numero = 7;
-            Object carta = getValorCarta(baraja, palo, numero);
-            System.out.println("Valor de la carta (" + palo + " " + numero + "): " + carta);
+            //String palo = "oros";
+            //int numero = 7;
+            //Object carta = getValorCarta(baraja, palo, numero);
+            //System.out.println("Valor de la carta (" + palo + " " + numero + "): " + carta);
 
         } catch (IOException e) {
             System.err.println("Error al cargar el archivo: " + e.getMessage());
