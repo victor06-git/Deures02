@@ -1,11 +1,15 @@
 package com.exercicis;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
-//import java.util.stream.Collectors;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 //import org.json.JSONArray;
 //import org.json.JSONObject;
@@ -26,7 +30,7 @@ public class RepasExamen0203 {
         System.out.println("Validar email (" + email + "): " + validarEmail(email));
 
         // Cargar estudiantes desde un archivo JSON
-        String filePath = "estudiantes.json"; // Asegúrate de que este archivo exista
+        String filePath = "./data/estuadiants.json"; // Asegúrate de que este archivo exista
         try {
             ArrayList<HashMap<String, Object>> estudiantes = loadEstudiantes(filePath);
             System.out.println("Estudiantes cargados: " + estudiantes);
@@ -114,7 +118,26 @@ public class RepasExamen0203 {
      */
     public static ArrayList<HashMap<String, Object>> loadEstudiantes(String filePath) throws IOException {
         // Implementa la lógica aquí
-        return new ArrayList<>(); // Cambia esto
+        ArrayList<HashMap<String, Object>> estudiants = new ArrayList<>();
+        String content = new String(Files.readAllBytes(Paths.get(filePath)));
+        JSONArray estudiantsArray = new JSONObject(content).getJSONArray("estudiantes");
+        
+        for (int i = 0; i < estudiantsArray.length(); i++){
+            HashMap<String, Object> estudiant = new HashMap<>();
+            JSONObject estudiantObject = estudiantsArray.getJSONObject(i);
+
+            for (String key : estudiantObject.keySet()) {
+                if (key.equals("nombre") || key.equals("edad")) {
+                    estudiant.put(key, estudiantObject.get(key));
+                } else {
+                    JSONArray asignaturas = estudiantObject.getJSONArray("asignaturas");
+                    estudiant.put("asignaturas", asignaturas);
+                }
+            }
+            estudiants.add(estudiant);
+        }
+        
+        return estudiants; // Cambia esto
     }
 
     /**
