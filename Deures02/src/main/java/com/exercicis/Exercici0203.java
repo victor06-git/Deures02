@@ -125,7 +125,7 @@ public class Exercici0203 {
      * @test ./runTest.sh com.exercicis.TestExercici0203#testLoadMonuments
      */
     public static ArrayList<HashMap<String, Object>> loadMonuments(String filePath) throws IOException {
-        ArrayList<HashMap<String, Object>> rst = new ArrayList<>();
+        ArrayList<HashMap<String, Object>> rst = new ArrayList<>(); //Es crea l'arraylist finals
         String content = new String(Files.readAllBytes(Paths.get(filePath)));
         JSONArray monumentsArray = new JSONObject(content).getJSONArray("monuments");
         for (int i = 0; i < monumentsArray.length(); i++) {
@@ -140,18 +140,21 @@ public class Exercici0203 {
                     HashMap<String, Object> detallsMap = new HashMap<>();
                     HashMap<String, Object> altres = new HashMap<>();
                     for (String detallsKey : detalls.keySet()) {
-                        if (!detallsKey.equals("any_declaracio") && !detallsKey.equals("coordenades")) {
+                        if (!detallsKey.equalsIgnoreCase("any_declaracio") && !detallsKey.equalsIgnoreCase("coordenades")) {
                             HashMap<String, Object> altre = new HashMap<>();
                             altre.put("clau", detallsKey);
                             altre.put("valor", detalls.get(detallsKey));
                             altres.put(detallsKey, altre);
                         } else {
-                            HashMap<String, Object> coordenades = new HashMap<>();
-                            JSONObject coordenadesJSON = detalls.getJSONObject("coordenades");
-
-                            coordenades.put("latitud", coordenadesJSON.getDouble("latitud"));
-                            coordenades.put("longitud", coordenadesJSON.getDouble("longitud"));
-                            detallsMap.put("coordenades",coordenades);
+                            if (detallsKey.equalsIgnoreCase("any_declaracio")) {
+                                detallsMap.put("any_declaracio", detalls.getInt("any_declaracio"));
+                            } else if (detallsKey.equalsIgnoreCase("coordenades")) {
+                                HashMap<String, Object> coordenades = new HashMap<>();
+                                JSONObject coordenadesJSON = detalls.getJSONObject("coordenades");
+                                coordenades.put("latitud", coordenadesJSON.getDouble("latitud"));
+                                coordenades.put("longitud", coordenadesJSON.getDouble("longitud"));
+                                detallsMap.put("coordenades", coordenades);
+                            }
                         }
                     }
                     detallsMap.put("altres", altres);
@@ -348,7 +351,7 @@ public class Exercici0203 {
         String rst = "│";
         for (int val = 0; val < values.length; val++) {
             if (values[val].length() > columnWidths[val]) {
-                rst += values[val].substring(0, columnWidths[val]) + "|";
+                rst += values[val].substring(0, columnWidths[val]) + "│";
             } else {
                 rst += values[val] + " ".repeat(columnWidths[val] - values[val].length()) + "│";
             }
@@ -401,7 +404,14 @@ public class Exercici0203 {
      */
     public  static String getCoordsString(HashMap<String, Object> monument) {
 
-        return "";
+        Double latitud = (Double) getMonumentValue(monument, "latitud");
+        Double longitud = (Double) getMonumentValue(monument, "longitud");
+
+        String rst = "";
+
+        rst += String.format("%.1f,%.1f", latitud, longitud);
+
+        return rst;
     }
 
     /**
@@ -424,6 +434,41 @@ public class Exercici0203 {
      */
     public static void taulaMonuments(ArrayList<HashMap<String, Object>> monuments) {
         
+        StringBuilder infoSquare = new StringBuilder();
+
+        int[] colWidth = {14, 5, 4, 12};
+        char[] separators0 = {'┌', '┬', '┐'};
+        String first_line = generaMarcTaula(colWidth, separators0);
+
+        infoSquare.append(first_line).append("\n");
+
+        String[] values = {"Nom", "Pais", "Any", "Coords"};
+        String titlesRow = formatRow(values, colWidth);
+
+        infoSquare.append(titlesRow).append("\n");
+
+        char[] separators1 = {'├', '┼', '┤'};
+        String middle_line = generaMarcTaula(colWidth, separators1);
+
+        infoSquare.append(middle_line).append("\n");
+
+        for (HashMap<String, Object> monument : monuments) {
+            String[] mon = new String[4];
+            mon[0] = (String) getMonumentValue(monument, "nom");
+            mon[1] = (String) getMonumentValue(monument, "pais");
+            mon[2] = String.valueOf(getMonumentValue(monument, "any"));
+            mon[3] = (String) getCoordsString(monument);
+            String info = formatRow(mon, colWidth);
+            infoSquare.append(info).append("\n");
+        }
+
+        char[] separators2 = {'└', '┴', '┘'};
+        String final_line = generaMarcTaula(colWidth, separators2);
+
+        infoSquare.append(final_line);
+
+        System.out.println(infoSquare.toString());
+
     }
 
     /**

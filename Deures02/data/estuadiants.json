@@ -1,0 +1,29 @@
+{
+    "estudiantes": [
+        {
+            "nombre": "Juan Pérez",
+            "edad": 20,
+            "asignaturas": ["Matemáticas", "Física", "Química"]
+        },
+        {
+            "nombre": "María García",
+            "edad": 22,
+            "asignaturas": ["Literatura", "Historia", "Arte"]
+        },
+        {
+            "nombre": "Luis Rodríguez",
+            "edad": 19,
+            "asignaturas": ["Biología", "Matemáticas", "Física"]
+        },
+        {
+            "nombre": "Ana López",
+            "edad": 21,
+            "asignaturas": ["Química", "Física", "Inglés"]
+        },
+        {
+            "nombre": "Carlos Sánchez",
+            "edad": 23,
+            "asignaturas": ["Matemáticas", "Historia", "Geografía"]
+        }
+    ]
+}
