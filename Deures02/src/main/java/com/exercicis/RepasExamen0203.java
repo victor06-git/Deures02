@@ -36,15 +36,15 @@ public class RepasExamen0203 {
             System.out.println("Estudiantes cargados: " + estudiantes);
 
             // Filtrar estudiantes por edad
-            //ArrayList<HashMap<String, Object>> estudiantesFiltrados = filtraEstudiantesPorEdad(estudiantes, 20, 22);
-            //System.out.println("Estudiantes filtrados (edad 20-22): " + estudiantesFiltrados);
+            ArrayList<HashMap<String, Object>> estudiantesFiltrados = filtraEstudiantesPorEdad(estudiantes, 20, 22);
+            System.out.println("Estudiantes filtrados (edad 20-22): " + estudiantesFiltrados);
 
             // Ordenar estudiantes por nombre
-            //ArrayList<HashMap<String, Object>> estudiantesOrdenados = ordenaEstudiantesPorNombre(estudiantes);
-            //System.out.println("Estudiantes ordenados por nombre: " + estudiantesOrdenados);
+            ArrayList<HashMap<String, Object>> estudiantesOrdenados = ordenaEstudiantesPorNombre(estudiantes);
+            System.out.println("Estudiantes ordenados por nombre: " + estudiantesOrdenados);
 
             // Mostrar tabla de estudiantes
-            //mostrarTablaEstudiantes(estudiantes);
+            mostrarTablaEstudiantes(estudiantes);
 
             // Generar baraja de cartas francesas
             //ArrayList<HashMap<String, Object>> baraja = generaBarajaFrancesa();
@@ -117,29 +117,31 @@ public class RepasExamen0203 {
      * @throws IOException Si hay un problema al leer el archivo.
      */
     public static ArrayList<HashMap<String, Object>> loadEstudiantes(String filePath) throws IOException {
-        // Implementa la lógica aquí
-        ArrayList<HashMap<String, Object>> estudiants = new ArrayList<>();
+        ArrayList<HashMap<String, Object>> estudiantes = new ArrayList<>();
         String content = new String(Files.readAllBytes(Paths.get(filePath)));
-        JSONArray estudiantsArray = new JSONObject(content).getJSONArray("estudiantes");
-        
-        for (int i = 0; i < estudiantsArray.length(); i++){
-            HashMap<String, Object> estudiant = new HashMap<>();
-            JSONObject estudiantObject = estudiantsArray.getJSONObject(i);
-
-            for (String key : estudiantObject.keySet()) {
+        JSONArray estudiantesArray = new JSONObject(content).getJSONArray("estudiantes");
+    
+        for (int i = 0; i < estudiantesArray.length(); i++) {
+            HashMap<String, Object> estudiante = new HashMap<>();
+            JSONObject estudianteObject = estudiantesArray.getJSONObject(i);
+    
+            for (String key : estudianteObject.keySet()) {
                 if (key.equals("nombre") || key.equals("edad")) {
-                    estudiant.put(key, estudiantObject.get(key));
-                } else {
-                    JSONArray asignaturas = estudiantObject.getJSONArray("asignaturas");
-                    estudiant.put("asignaturas", asignaturas);
+                    estudiante.put(key, estudianteObject.get(key));
+                } else if (key.equals("asignaturas")) {
+                    JSONArray asignaturasArray = estudianteObject.getJSONArray("asignaturas");
+                    String[] asignaturas = new String[asignaturasArray.length()];
+                    for (int j = 0; j < asignaturasArray.length(); j++) {
+                        asignaturas[j] = asignaturasArray.getString(j);
+                    }
+                    estudiante.put("asignaturas", asignaturas);
                 }
             }
-            estudiants.add(estudiant);
+            estudiantes.add(estudiante);
         }
-        
-        return estudiants; // Cambia esto
+    
+        return estudiantes;
     }
-
     /**
      * Filtra la lista de estudiantes por edad.
      * 
@@ -150,36 +152,176 @@ public class RepasExamen0203 {
      */
     public static ArrayList<HashMap<String, Object>> filtraEstudiantesPorEdad(ArrayList<HashMap<String, Object>> estudiantes, int edadMinima, int edadMaxima) {
         // Implementa la lógica aquí
-        return new ArrayList<>(); // Cambia esto
-    }
 
-    /**
-     * Ordena la lista de estudiantes por nombre.
+        ArrayList<HashMap<String, Object>> filtraEstudiants = new ArrayList<>();
+        for (int i = 0; i < estudiantes.size(); i++){
+            HashMap<String, Object> estudiant = estudiantes.get(i);
+            for (String key : estudiant.keySet()) {
+                if (key.equals("edad")) {
+                    int edat = (int) estudiant.get(key);
+                    if (edat >= edadMinima && edat <= edadMaxima){
+                        filtraEstudiants.add(estudiant);
+                    }
+                }
+            }
+        }
+
+        return filtraEstudiants; // Cambia esto
+    }
+     /**
+
+     * Ordena la lista de estudiantes por nombre utilizando el método de burbuja.
      * 
      * @param estudiantes Lista de estudiantes.
      * @return Lista ordenada de estudiantes.
      */
-    public static ArrayList<HashMap<String, Object>> ordenaEstudiantesPorNombre(ArrayList<HashMap<String, Object>> estudiantes) {
-        // Implementa la lógica aquí
-        return estudiantes; // Cambia esto
+
+     public static ArrayList<HashMap<String, Object>> ordenaEstudiantesPorNombre(ArrayList<HashMap<String, Object>> estudiantes) {
+
+        // Itera sobre la lista de estudiantes, menos el último elemento
+        for (int i = 0; i < estudiantes.size() - 1; i++) {
+            // Itera sobre la lista de estudiantes, menos los elementos ya ordenados
+            for (int j = 0; j < estudiantes.size() - 1 - i; j++) {
+                // Obtiene el nombre del estudiante en la posición j
+                String nombre1 = (String) estudiantes.get(j).get("nombre");
+                // Obtiene el nombre del estudiante en la posición j + 1
+                String nombre2 = (String) estudiantes.get(j + 1).get("nombre");                
+                // Compara los nombres y los intercambia si están en el orden incorrecto
+                if (nombre1.compareTo(nombre2) > 0) {
+                    // Crea una variable temporal para almacenar el estudiante en la posición j
+                    HashMap<String, Object> temp = estudiantes.get(j);
+                    // Intercambia el estudiante en la posición j con el estudiante en la posición j + 1
+                    estudiantes.set(j, estudiantes.get(j + 1));
+                    // Coloca el estudiante temporal en la posición j + 1
+                    estudiantes.set(j + 1, temp);
+                }
+            }
+        }
+        // Retorna la lista de estudiantes ya ordenada por nombre
+        return estudiantes; 
     }
 
     /**
      * Muestra una tabla con la información de los estudiantes.
      * 
+     * ┌────────────────┬────────────┬───────────────────────┐
+     * │Nombre          │Edad        │Assignaturas           │
+     * ├────────────────┼────────────┼───────────────────────┤
+     * │ Gran Muralla C.│ Xina       │                       │
+     * │ Machu Picchu   │ Perú       │                       │
+     * └────────────────┴────────────┴───────────────────────┘
+     * 
      * @param estudiantes Lista de estudiantes.
      */
     public static void mostrarTablaEstudiantes(ArrayList<HashMap<String, Object>> estudiantes) {
-        // Implementa la lógica aquí
+        int[] colWidth = {20, 4, 33};
+        String rst = "┌";
+        // First line
+        for (int i = 0; i < colWidth.length; i++) {
+            rst += "─".repeat(colWidth[i]);
+            if (i == colWidth.length - 1) {
+                rst += "┐";
+            } else {
+                rst += "┬";
+            }
+        }
+    
+        System.out.println(rst);
+    
+        // Titles line
+        String[] titles = {"Nombre", "Edad", "Assignaturas"};
+        String rst1 = "│";
+        for (int i = 0; i < colWidth.length; i++) {
+            String title = titles[i];
+            if (title.length() > colWidth[i]) {
+                title = title.substring(0, colWidth[i]);
+            }
+            rst1 += title + " ".repeat(colWidth[i] - title.length());
+            if (i == colWidth.length - 1) {
+                rst1 += "│";
+            } else {
+                rst1 += "│";
+            }
+        }
+    
+        System.out.println(rst1);
+    
+        // Second Line
+        String rst2 = "├";
+        for (int i = 0; i < colWidth.length; i++) {
+            rst2 += "─".repeat(colWidth[i]);
+            if (i == colWidth.length - 1) {
+                rst2 += "┤";
+            } else {
+                rst2 += "┼";
+            }
+        }
+    
+        System.out.println(rst2);
+    
+        // Data rows
+        for (HashMap<String, Object> estudiante : estudiantes) {
+            String estudiants = "│";
+            String nom = (String) estudiante.get("nombre");
+            String edat = String.valueOf(estudiante.get("edad"));
+            String rst3 = "";
+    
+            // Verificar si el array de asignaturas no es nulo
+            if (estudiante.get("asignaturas") != null) {
+                String[] asignaturas = (String[]) estudiante.get("asignaturas");
+                for (int j = 0; j < asignaturas.length; j++) {
+                    rst3 += asignaturas[j];
+                    if (j < asignaturas.length - 1) {
+                        rst3 += ", ";
+                    }
+                }
+            }
+    
+            estudiants += nom + " ".repeat(Math.max(0, colWidth[0] - nom.length()));
+            estudiants += "│";
+            estudiants += edat + " ".repeat(Math.max(0, colWidth[1] - edat.length()));
+            estudiants += "│";
+            estudiants += rst3 + " ".repeat(Math.max(0, colWidth[2] - rst3.length()));
+            estudiants += "│";
+    
+            System.out.println(estudiants);
+        }
+    
+        // Last line
+        String rst4 = "└";
+        for (int i = 0; i < colWidth.length; i++) {
+            rst4 += "─".repeat(colWidth[i]);
+            if (i == colWidth.length - 1) {
+                rst4 += "┘";
+            } else {
+                rst4 += "┴";
+            }
+        }
+    
+        System.out.println(rst4);
     }
 
     /**
      * Genera una baraja de cartas francesas.
      * 
+     * 
+     * La baraja francesa consta de 52 cartas divididas en cuatro palos: 
+     * corazones, diamantes, tréboles y picas. 
+     * 
+     * Cada palo tiene 13 cartas: As, del 2 al 10, J (Jota), Q (Reina) y K (Rey). 
+     * 
+     * Además, a menudo se incluyen 2 comodines.
+     * 
      * @return ArrayList con las cartas de la baraja.
      */
     public static ArrayList<HashMap<String, Object>> generaBarajaFrancesa() {
         // Implementa la lógica aquí
+
+        String[] palos = {"Corazones", "Diamantes", "Tréboles", "Picas"};
+        String[] types = {"As", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+
+        
+
         return new ArrayList<>(); // Cambia esto
     }
 
