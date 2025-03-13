@@ -3,7 +3,10 @@ package com.exercicis;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
@@ -348,4 +351,136 @@ public class RepasExamen0203 {
         // Implementa la lógica aquí
         return null; // Cambia esto
     }
+
+   
+
+    /**
+     * Valida una data en el format yyyy-MM-ddTHH:mm:ss.
+     *
+     * @param fecha Cadena de text que representa la data a validar.
+     * @return 'true' si la data és vàlida, 'false' si no ho és.
+     */
+    public static boolean validarFecha(String fecha) {
+        if (fecha == null || fecha.isEmpty()) {
+            return false;
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        format.setLenient(false); // No permet dates no vàlides
+
+        try {
+            Date date = format.parse(fecha);
+            return true; // Si no es llença una excepció, la data és vàlida
+        } catch (ParseException e) {
+            return false; // La data no és vàlida
+        }
+    }
+
+    /**
+     * 
+        public static boolean isValidDate(String dateTime) {
+
+    // Comprobar que la cadena no es nula ni vacía
+
+    if (dateTime == null || dateTime.isEmpty()) {
+
+        return false;
+
+    }
+
+
+    // Definir el formato de la fecha
+
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+
+    // Intentar analizar la fecha
+
+    try {
+
+        // Analizar la fecha
+
+        format.parse(dateTime);
+
+    } catch (ParseException e) {
+
+        return false; // La fecha no es válida
+
+    }
+
+
+    // Separar la fecha y la hora
+
+    String[] dateTimeParts = dateTime.split("T");
+
+    String[] dateParts = dateTimeParts[0].split("-");
+
+    String[] timeParts = dateTimeParts[1].split(":");
+
+
+    // Extraer año, mes, día, hora, minuto y segundo
+
+    int year = Integer.parseInt(dateParts[0]);
+
+    int month = Integer.parseInt(dateParts[1]);
+
+    int day = Integer.parseInt(dateParts[2]);
+
+    int hour = Integer.parseInt(timeParts[0]);
+
+    int minute = Integer.parseInt(timeParts[1]);
+
+    int second = Integer.parseInt(timeParts[2]);
+
+
+    // Validar el año
+
+    if (year < 0 || year > 9999) {
+
+        return false; // Años fuera de rango
+
+    }
+
+
+    // Validar el mes
+
+    if (month < 1 || month > 12) {
+
+        return false; // Mes fuera de rango
+
+    }
+
+
+    // Validar el día según el mes
+
+    int maxDays;
+
+    switch (month) {
+
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+
+            maxDays = 31;
+
+            break;
+
+        case 4: case 6: case 9: case 11:
+
+            maxDays = 30;
+
+            break;
+
+        case 2:
+
+            // Comprobar si es año bisiesto
+
+            maxDays = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) ? 29 : 28;
+
+            break;
+
+        default:
+
+            return false; // Esto no debería ocurrir debido a la validación anterior
+
+    }
+     */
 }
